@@ -1,0 +1,7 @@
+ut_temp_*.txt
+*.user
+*.txt
+/.vs/**
+/packages/**
+/ut_cpp_dd/**
+/x64/**
