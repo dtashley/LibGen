@@ -94,6 +94,12 @@ Thread safety generally requires that no state persists outside the variable or
 object being operated on; or that if such state exists it is stored in
 thread-local storage.
 
+### C, C++ Versions Supported
+
+The compiler language version support assumed for C code is C99.
+
+The compiler language version support assumed for C++ is C++17.
+
 ### Command-Line Preprocessor Definitions
 
 The code is parameterized by preprocessor definitions specified on the
@@ -101,8 +107,9 @@ command line.  To avoid as much confusion as possible, the switches:
 * Are all prefixed with *LBGN_CLDF_*.
 * Except for the prefix, are common with the switches for *LibNum*
   (https://github.com/dtashley/LibNum).
-* All enumerated switches must be specified, or a compilation error will
-  result.
+* All command-line define switches are optional. If switches in a given
+  category are absent, a default choice is made (the default is unspecified
+  in the documentation below).
 
 Switches are divided into two categories:
 * Switches that are either present or absent (i.e. are Boolean in nature).
@@ -125,105 +132,44 @@ Must be one of the following values:
 | `LBGN_CLDF_PFORM_SW_ANDROID` | Android. |
 | `LBGN_CLDF_PFORM_SW_FIRE_OS` | FireOS. |
 | `LBGN_CLDF_PFORM_SW_IOS`     | iOS. |
-| `LBGN_CLDF_PFORM_SW_NO_OS`   | Embedded system with none of the operating systems listed above or system with no operating system. |
+| `LBGN_CLDF_PFORM_SW_UNSPECIFIED`   | Embedded system with none of the operating systems listed above or system with no operating system. |
 
-## `LBGN_CLDF_PFORM_OS_ADR_SIZE` (Mnemonic: *L*i*bG*e*n* *C*ommand-*L*ine *D*e*f*inition, *P*lat*form*, *O*perating *S*ystem *Ad*d*r*ess *Size*)
+## `LBGN_CLDF_OS_ADR_SIZE` (Mnemonic: *L*i*bG*e*n* *C*ommand-*L*ine *D*e*f*inition, *O*perating *S*ystem *Ad*d*r*ess *Size*)
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LBGN_CLDF_PFORM_OS_ADR_SIZE_32`  | 32-bit operating system with 32-bit addresses. |
-| `LBGN_CLDF_PFORM_OS_ADR_SIZE_64`  | 64-bit operating system with 32-bit addresses. |
-| `LBGN_CLDF_PFORM_OS_ADR_SIZE_UNSPECIFIED`  | Nature of operating system and address size unspecified. |
+| `LBGN_CLDF_OS_ADR_SIZE_32`  | 32-bit operating system with 32-bit addresses. |
+| `LBGN_CLDF_OS_ADR_SIZE_64`  | 64-bit operating system with 32-bit addresses. |
+| `LBGN_CLDF_OS_ADR_SIZE_UNSPECIFIED`  | Nature of operating system and address size unspecified. |
 
-## `LIBNUM_CLSW_PFORM_AL`
+## `LBGN_CLDF_PFORM_ARCH` (Mnemonic: *L*i*bG*e*n* *C*ommand-*L*ine *D*e*f*inition, *P*lat*form* *Arch*itecture)
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LIBNUM_CLSW_PFORM_AL_X86_32`       | x86 architecture, 32-bit. |
-| `LIBNUM_CLSW_PFORM_AL_X86_64`       | x86 architecture, 64-bit. |
-| `LIBNUM_CLSW_PFORM_AL_UNSPECIFIED`  | Architecture unspecified.  This will cause generic C code to be used, which may be very inefficient in some cases. |
+| `LBGN_CLDF_PFORM_ARCH_X86_32`       | x86 architecture, 32-bit. |
+| `LBGN_CLDF_PFORM_ARCH_X86_64`       | x86 architecture, 64-bit. |
+| `LBGN_CLDF_PFORM_ARCH_UNSPECIFIED`  | Architecture unspecified. |
 
-## `LIBNUM_CLSW_SZ_LIMB_ARITH_INT`
+## `LBGN_CLDF_PROJTYPE`
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LIBNUM_CLSW_SZ_LIMB_ARITH_INT_16`           | The best limb size for large integer arithmetic is 16 bits. |
-| `LIBNUM_CLSW_SZ_LIMB_ARITH_INT_32`           | The best limb size for large integer arithmetic is 32 bits. |
-| `LIBNUM_CLSW_SZ_LIMB_ARITH_INT_64`           | The best limb size for large integer arithmetic is 64 bits. |
-| `LIBNUM_CLSW_SZ_LIMB_ARITH_INT_UNSPECIFIED`  | The best limb size for large integer arithmetic is not specified.  This will cause generic C code to be used, which may be very inefficient in some cases. |
+| `LBGN_CLDF_PROJTYPE_OBJ`           | Source files are being used to produce an object file. |
+| `LBGN_CLDF_PROJTYPE_LIB`           | Source files are being used to produce a classic library. |
+| `LBGN_CLDF_PROJTYPE_WINDLL`        | Source files are being used to produce Windows DLL. |
+| `LBGN_CLDF_PROJTYPE_EXECUTABLE`           | Source files are being used to produce an executable program. |
+| `LBGN_CLDF_PROJTYPE_UNSPECIFIED`   | The type of project is not specified. |
 
-## `LIBNUM_CLSW_SZ_DT_CHAR`
+## `LBGN_CLDF_ASSERTIONS`
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LIBNUM_CLSW_SZ_DT_CHAR_8`           | Characters are 8 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_CHAR_16`           | Characters are 16 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_CHAR_32`           | Characters are 32 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_CHAR_UNSPECIFIED`  | The size of short integers is not specified.  This will cause generic C code to be used, which may be very inefficient in some cases. |
-
-## `LIBNUM_CLSW_SZ_DT_INT_SHORT`
-Must be one of the following values:
-
-| Constant                     | Interpretation |
-| :---                         |     :---       |
-| `LIBNUM_CLSW_SZ_DT_INT_SHORT_16`           | Short integers are 16 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_SHORT_32`           | Short integers are 32 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_SHORT_64`           | Short integers are 64 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_SHORT_UNSPECIFIED`  | The size of short integers is not specified.  This will cause generic C code to be used, which may be very inefficient in some cases. |
-
-## `LIBNUM_CLSW_SZ_DT_INT`
-Must be one of the following values:
-
-| Constant                     | Interpretation |
-| :---                         |     :---       |
-| `LIBNUM_CLSW_SZ_DT_INT_16`           | Integers are 16 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_32`           | Integers are 32 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_64`           | Integers are 64 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_UNSPECIFIED`  | The size of integers is not specified.  This will cause generic C code to be used, which may be very inefficient in some cases. |
-
-## `LIBNUM_CLSW_SZ_DT_INT_L`
-Must be one of the following values:
-
-| Constant                     | Interpretation |
-| :---                         |     :---       |
-| `LIBNUM_CLSW_SZ_DT_INT_L_32`           | Long integers are 32 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_L_64`           | Long integers are 64 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_L_96`           | Long integers are 96 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_L_128`           | Long integers are 128 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_L_UNSPECIFIED`  | The size of long integers is not specified.  This will cause generic C code to be used, which may be very inefficient in some cases. |
-
-## `LIBNUM_CLSW_SZ_DT_INT_LL`
-Must be one of the following values:
-
-| Constant                     | Interpretation |
-| :---                         |     :---       |
-| `LIBNUM_CLSW_SZ_DT_INT_LL_64`           | Long long integers are 64 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_LL_96`           | Long long integers are 96 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_LL_128`           | Long long integers are 128 bits in size. |
-| `LIBNUM_CLSW_SZ_DT_INT_LL_UNSPECIFIED`  | The size of long long integers is not specified.  This will cause generic C code to be used, which may be very inefficient in some cases. |
-
-## `LIBNUM_CLSW_PROJTYPE`
-Must be one of the following values:
-
-| Constant                     | Interpretation |
-| :---                         |     :---       |
-| `LIBNUM_CLSW_PROJTYPE_OBJ`           | Source files are being used to produce an object file. |
-| `LIBNUM_CLSW_PROJTYPE_LIB`           | Source files are being used to produce a classic library. |
-| `LIBNUM_CLSW_PROJTYPE_WINDLL`        | Source files are being used to produce Windows DLL. |
-| `LIBNUM_CLSW_PROJTYPE_APP`           | Source files are being used to produce an application. |
-| `LIBNUM_CLSW_PROJTYPE_UNSPECIFIED`   | The type of project is not specified. |
-
-## `LIBNUM_CLSW_ASSERTIONS`
-Must be one of the following values:
-
-| Constant                     | Interpretation |
-| :---                         |     :---       |
-| `LIBNUM_CLSW_ASSERTIONS_DISABLED`              | Assertions are disabled. |
-| `LIBNUM_CLSW_ASSERTIONS_ENABLED`               | Assertions are enabled. |
+| `LBGN_CLDF_ASSERTIONS_DISABLED`              | Assertions are disabled. |
+| `LBGN_CLDF_ASSERTIONS_ENABLED`               | Assertions are enabled. |
 
 ## `LIBNUM_CLSW_DEBUGGING`
 Must be one of the following values:
