@@ -58,7 +58,7 @@ into a proper library.
 
 In order for the source files in this repository to be usable
 in a wide variety of applications, certain design and documentation
-rules have to be documented and followed.  Those 
+rules have to be documented and followed.  Those
 rules are described in the next two sections.
 
 ## Design Rules
@@ -71,66 +71,70 @@ a header file has the same base name as the associated C or C++ source
 file.
 
 ### File Name Uniqueness
-No two source/header files, anywhere in this repository, have the same base name.
+No two source/header files, anywhere in this repository, have the same
+base name.
 
 ### File Name, Function, Class, and Constant Prefixes
-All files, function names, class names, and constants are prefixed with _Lu_, _LU_, *LU_*, or
-something similar to make library membership apparent, and to lower the probability of
-naming collisions with other parts of the program in which the library is being
+All files, function names, class names, and constants are prefixed
+with _LBGN_, _LbGn_, *Lbgn_*, or something similar to make library
+membership apparent, and to lower the probability of naming collisions
+with other parts of the program in which the library is being
 used.
 
 ### Threading Rules
-All of the functions and classes in this module are thread-safe, unless otherwise noted,
-subject to
-the following qualifications and restrictions:
+All of the functions and classes in this module are thread-safe, unless
+otherwise noted, subject to the following qualifications and restrictions:
 
 * The caller/client is responsible for ensuring that the memory or objects
-on which the functions operate are used in a thread-safe way.
+  on which the functions operate are used in a thread-safe way.
 * Thread-safe versions of library functions (_printf()_, _malloc()_, etc.) must
-be linked into the program.
+  be linked into the program.
 
 Thread safety generally requires that no state persists outside the variable or
 object being operated on; or that if such state exists it is stored in
 thread-local storage.
 
-### Command-Line Preprocessor Switches
+### Command-Line Preprocessor Definitions
 
-The code is parameterized by preprocessor switches specified on the command line.  To avoid
-as much confusion as possible, the switches:
-* Are all prefixed with *LIBNUM_CLSW_*.
-* Except for the prefix, are common with the switches for *LibGen* (https://github.com/dtashley/LibGen).
-* All enumerated switches must be specified, or a compilation error will result.
+The code is parameterized by preprocessor definitions specified on the
+command line.  To avoid as much confusion as possible, the switches:
+* Are all prefixed with *LBGN_CLDF_*.
+* Except for the prefix, are common with the switches for *LibNum*
+  (https://github.com/dtashley/LibNum).
+* All enumerated switches must be specified, or a compilation error will
+  result.
 
 Switches are divided into two categories:
 * Switches that are either present or absent (i.e. are Boolean in nature).
-* Switches that are enumerated in nature (must be specified, and must be one of a set of values).
+* Switches that are enumerated in nature (must be specified, and must be one
+  of a set of values).
 
-## `LIBNUM_CLSW_PFORM_SW`
+## `LBGN_CLDF_PFORM_SW` (Mnemonic: *L*i*bG*e*n* *C*ommand-*L*ine *D*e*f*inition, *P*lat*form*, *S*oft*w*are)
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LIBNUM_CLSW_PFORM_SW_WINAPI`  | Windows API, also sometimes called Win32, although this is a misnomer because 64-bit programs and 64-bit operating systems also use the Windows API. |
-| `LIBNUM_CLSW_PFORM_SW_WINAPI`  | Windows API with MFC. |
-| `LIBNUM_CLSW_PFORM_SW_WIN_NET` | Windows .NET. |
-| `LIBNUM_CLSW_PFORM_SW_UNIX`    | Unix. |
-| `LIBNUM_CLSW_PFORM_SW_LINUX`   | Linux. |
-| `LIBNUM_CLSW_PFORM_SW_FREEBSD` | FreeBSD. |
-| `LIBNUM_CLSW_PFORM_SW_CYGWIN`  | Cygwin. |
-| `LIBNUM_CLSW_PFORM_SW_MSYS`    | MSYS. |
-| `LIBNUM_CLSW_PFORM_SW_ANDROID` | Android. |
-| `LIBNUM_CLSW_PFORM_SW_FIRE_OS` | FireOS. |
-| `LIBNUM_CLSW_PFORM_SW_IOS`     | iOS. |
-| `LIBNUM_CLSW_PFORM_SW_NO_OS`   | Embedded system with none of the operating systems listed above or system with none of the operating systems listed above. |
+| `LBGN_CLDF_PFORM_SW_WINAPI`  | Windows API, also sometimes called Win32, although this is a misnomer because 64-bit programs and 64-bit operating systems also use the Windows API. |
+| `LBGN_CLDF_PFORM_SW_WINAPI_MFC`  | Windows API with MFC. |
+| `LBGN_CLDF_PFORM_SW_WIN_NET` | Windows .NET. |
+| `LBGN_CLDF_PFORM_SW_UNIX`    | Unix. |
+| `LBGN_CLDF_PFORM_SW_LINUX`   | Linux. |
+| `LBGN_CLDF_PFORM_SW_FREEBSD` | FreeBSD. |
+| `LBGN_CLDF_PFORM_SW_CYGWIN`  | Cygwin. |
+| `LBGN_CLDF_PFORM_SW_MSYS`    | MSYS. |
+| `LBGN_CLDF_PFORM_SW_ANDROID` | Android. |
+| `LBGN_CLDF_PFORM_SW_FIRE_OS` | FireOS. |
+| `LBGN_CLDF_PFORM_SW_IOS`     | iOS. |
+| `LBGN_CLDF_PFORM_SW_NO_OS`   | Embedded system with none of the operating systems listed above or system with no operating system. |
 
-## `LIBNUM_CLSW_PFORM_OS_ADR_SIZE`
+## `LBGN_CLDF_PFORM_OS_ADR_SIZE` (Mnemonic: *L*i*bG*e*n* *C*ommand-*L*ine *D*e*f*inition, *P*lat*form*, *O*perating *S*ystem *Ad*d*r*ess *Size*)
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LIBNUM_CLSW_PFORM_OS_ADR_SIZE_32`  | 32-bit operating system with 32-bit addresses. |
-| `LIBNUM_CLSW_PFORM_OS_ADR_SIZE_64`  | 64-bit operating system with 32-bit addresses. |
-| `LIBNUM_CLSW_PFORM_OS_ADR_SIZE_UNSPECIFIED`  | Nature of operating system and address size unspecified. |
+| `LBGN_CLDF_PFORM_OS_ADR_SIZE_32`  | 32-bit operating system with 32-bit addresses. |
+| `LBGN_CLDF_PFORM_OS_ADR_SIZE_64`  | 64-bit operating system with 32-bit addresses. |
+| `LBGN_CLDF_PFORM_OS_ADR_SIZE_UNSPECIFIED`  | Nature of operating system and address size unspecified. |
 
 ## `LIBNUM_CLSW_PFORM_AL`
 Must be one of the following values:
