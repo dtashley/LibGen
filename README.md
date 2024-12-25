@@ -102,6 +102,44 @@ The compiler language version support assumed for C++ is C++17.
 
 ### Verbosity Levels
 
+Most programs incorporating this library have an optional
+verbosity level, typically specified with a *-v* option.  The verbosity
+levels, 0-9, as known to the library, are explained below.  It is
+anticipated that all programs using the library will use the
+same convention for verbosity level.
+
+The conventions for verbosity level are:
+* This library will be the reservoir of verbosity for any program
+  incorporating this library.  Mechanisms TBD.
+* The program incorporating this library will decide on a verbosity
+  level, perhaps using a simple default, or perhaps considering
+  command-line options.
+* The program incorporating this library will communicate the verbosity
+  level to this library.  Mechanisms TBD.
+* The verbosity level will be determined and communicated before
+  multithreaded operation starts, and the verbosity level will not
+  be changed, so that there are no threading issues.
+* It won't be economical to incorporate all output-generating code in
+  all programs, as this might result in large executables.  For this
+  reason, the `LBGN_VERBOSITY_SUPPORT_MAX` command-line definition
+  is described below.
+
+The anticipated form in which output statements appear in programs,
+for output statements with verbosity level greater than 3,
+is:
+
+```
+#if (LBGN_VERBOSITY_SUPPORT_MAX >= 5)
+  if (verbosity >= 5)
+  {
+    output statements for verbosity level 5 go here;
+  }
+#endif
+```
+
+For output statments corresponding to a verbosity level of 3 or less,
+it is expected that the proprocessor test will be omitted.
+
 | Level | Brief Description | *stdout* | *stderr* | Long Description           |
 | :---  |     :---          | :---     |  :---    | :---                  |
 | `0`  | Silent             | No output. | No output. | No *stdout* or *stderr* output.  All results through process exit code and generated files. |
@@ -173,7 +211,6 @@ Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LBGN_CLDF_PROJTYPE_OBJ`           | Source files are being used to produce an object file. |
 | `LBGN_CLDF_PROJTYPE_LIB`           | Source files are being used to produce a classic library. |
 | `LBGN_CLDF_PROJTYPE_WINDLL`        | Source files are being used to produce Windows DLL. |
 | `LBGN_CLDF_PROJTYPE_EXECUTABLE`           | Source files are being used to produce an executable program. |
