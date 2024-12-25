@@ -104,10 +104,16 @@ The compiler language version support assumed for C++ is C++17.
 
 | Level | Brief Description | *stdout* | *stderr* | Long Description           |
 | :---  |     :---          | :---     |  :---    | :---                  |
-| `0`  | Silent             | No output | No output | No *stdout* or *stderr* output.  All results through process exit code and generated files. |
-| `1`  | Errors only, on *stderr* only. | No output | Errors only | No output to *stdout*.  Errors, if any, are described on *stderr*. |
-| `1`  | Errors only, on both *stdout* and *stderr*. | No output | Errors only | No output to *stdout*.  Errors, if any, are described on *stderr*. |
-| `2`  | Errors on stderr and stdout, major steps announced on stdout. |
+| `0`  | Silent             | No output. | No output. | No *stdout* or *stderr* output.  All results through process exit code and generated files. |
+| `1`  | Errors only, on *stderr* only. | No output. | Errors only. | No output to *stdout*.  Errors, if any, are described on *stderr*. |
+| `2`  | Errors only, on both *stdout* and *stderr*. | No output | Errors only | No output to *stdout*.  Errors, if any, are described on *stderr*. |
+| `3`  (default) | Errors on *stderr* and *stdout*, major steps announced on *stdout*. | Major steps, errors. | Errors only. | Errors on *stderr* and *stdout*, major steps announced on *stdout*. |
+| `4`   | Errors on *stderr* and *stdout*, major and minor steps announced on *stdout* | Major and minor steps, errors. | Errors only. | Errors on *stderr* and *stdout*, major and minor steps announced on *stdout*. |
+| `5`   | All previous levels plus algorithm steps and notes.  | Errors, all previous levels plus algorithm steps and notes. | Errors only. | Errors on *stderr* and *stdout*, all previous levels plus algorithm steps and notes announced on *stdout*. |
+| `6`   | All previous levels plus module/class public function entries and returns. | Errors, all previous levels plus module/class public function entries and returns. | Errors only. | Errors on *stderr* and *stdout*, all previous levels plus module/class public function entries and returns announced on *stdout*. |
+| `7`   | All previous levels plus (even non-public) function entries and returns. | Errors, all previous levels plus (even non-public) function entries and returns. | Errors only. | Errors on *stderr* and *stdout*, all previous levels plus (even non-public) function entries and returns announced on *stdout*. |
+| `8`   | All previous levels plus line execution details. | Errors, all previous levels plus line execution details. | Errors only. | Errors on *stderr* and *stdout*, all previous levels plus line execution details announced on *stdout*. |
+| `9`   | Maximum detail.  | Maximum detail, errors. | Errors only. | Errors on *stderr* and *stdout*, all possible information announced on *stdout*. |
 
 
 ### Command-Line Preprocessor Definitions
@@ -180,6 +186,10 @@ Must be one of the following values:
 | :---                         |     :---       |
 | `LBGN_CLDF_ASSERTIONS_DISABLED` (default)     | Assertions are disabled. |
 | `LBGN_CLDF_ASSERTIONS_ENABLED`               | Assertions are enabled. |
+
+## `LBGN_VERBOSITY_SUPPORT_MAX`
+Must be an integer 0..9. The maximum verbosity support.  Used to create less bulky code.  Default is 3.
+
 
 ## `LBGN_CLDF_LOGGING`
 Must be one of the following values:
