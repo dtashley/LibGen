@@ -100,6 +100,16 @@ The compiler language version support assumed for C code is C99.
 
 The compiler language version support assumed for C++ is C++17.
 
+### Verbosity Levels
+
+| Level | Brief Description | *stdout* | *stderr* | Long Description           |
+| :---  |     :---          | :---     |  :---    | :---                  |
+| `0`  | Silent             | No output | No output | No *stdout* or *stderr* output.  All results through process exit code and generated files. |
+| `1`  | Errors only, on *stderr* only. | No output | Errors only | No output to *stdout*.  Errors, if any, are described on *stderr*. |
+| `1`  | Errors only, on both *stdout* and *stderr*. | No output | Errors only | No output to *stdout*.  Errors, if any, are described on *stderr*. |
+| `2`  | Errors on stderr and stdout, major steps announced on stdout. |
+
+
 ### Command-Line Preprocessor Definitions
 
 The code is parameterized by preprocessor definitions specified on the
@@ -132,7 +142,7 @@ Must be one of the following values:
 | `LBGN_CLDF_PFORM_SW_ANDROID` | Android. |
 | `LBGN_CLDF_PFORM_SW_FIRE_OS` | FireOS. |
 | `LBGN_CLDF_PFORM_SW_IOS`     | iOS. |
-| `LBGN_CLDF_PFORM_SW_UNSPECIFIED`   | Embedded system with none of the operating systems listed above or system with no operating system. |
+| `LBGN_CLDF_PFORM_SW_UNSPECIFIED` (default)  | Operating system not specified, system with none of the operating systems listed above, or system with no operating system. |
 
 ## `LBGN_CLDF_OS_ADR_SIZE` (Mnemonic: *L*i*bG*e*n* *C*ommand-*L*ine *D*e*f*inition, *O*perating *S*ystem *Ad*d*r*ess *Size*)
 Must be one of the following values:
@@ -141,7 +151,7 @@ Must be one of the following values:
 | :---                         |     :---       |
 | `LBGN_CLDF_OS_ADR_SIZE_32`  | 32-bit operating system with 32-bit addresses. |
 | `LBGN_CLDF_OS_ADR_SIZE_64`  | 64-bit operating system with 32-bit addresses. |
-| `LBGN_CLDF_OS_ADR_SIZE_UNSPECIFIED`  | Nature of operating system and address size unspecified. |
+| `LBGN_CLDF_OS_ADR_SIZE_UNSPECIFIED` (default)  | Nature of operating system and address size unspecified. |
 
 ## `LBGN_CLDF_PFORM_ARCH` (Mnemonic: *L*i*bG*e*n* *C*ommand-*L*ine *D*e*f*inition, *P*lat*form* *Arch*itecture)
 Must be one of the following values:
@@ -150,7 +160,7 @@ Must be one of the following values:
 | :---                         |     :---       |
 | `LBGN_CLDF_PFORM_ARCH_X86_32`       | x86 architecture, 32-bit. |
 | `LBGN_CLDF_PFORM_ARCH_X86_64`       | x86 architecture, 64-bit. |
-| `LBGN_CLDF_PFORM_ARCH_UNSPECIFIED`  | Architecture unspecified. |
+| `LBGN_CLDF_PFORM_ARCH_UNSPECIFIED` (default) | Architecture unspecified. |
 
 ## `LBGN_CLDF_PROJTYPE`
 Must be one of the following values:
@@ -161,45 +171,44 @@ Must be one of the following values:
 | `LBGN_CLDF_PROJTYPE_LIB`           | Source files are being used to produce a classic library. |
 | `LBGN_CLDF_PROJTYPE_WINDLL`        | Source files are being used to produce Windows DLL. |
 | `LBGN_CLDF_PROJTYPE_EXECUTABLE`           | Source files are being used to produce an executable program. |
-| `LBGN_CLDF_PROJTYPE_UNSPECIFIED`   | The type of project is not specified. |
+| `LBGN_CLDF_PROJTYPE_UNSPECIFIED` (default)  | The type of project is not specified. |
 
 ## `LBGN_CLDF_ASSERTIONS`
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LBGN_CLDF_ASSERTIONS_DISABLED`              | Assertions are disabled. |
+| `LBGN_CLDF_ASSERTIONS_DISABLED` (default)     | Assertions are disabled. |
 | `LBGN_CLDF_ASSERTIONS_ENABLED`               | Assertions are enabled. |
 
-## `LIBNUM_CLSW_DEBUGGING`
+## `LBGN_CLDF_LOGGING`
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LIBNUM_CLSW_DEBUGGING_DISABLED`              | Debugging and logging functionality should not be included. |
-| `LIBNUM_CLSW_DEBUGGING_ENABLED`            | Debugging and logging functionality should be included. |
-| `LIBNUM_CLSW_DEBUGLVL_UNSPECIFIED`        | Debug level is not specified. |
+| `LBGN_CLDF_LOGGING_DISABLED`              | Logging functionality should not be included. |
+| `LBGN_CLDF_LOGGING_ENABLED`            | Logging functionality should be included. |
 
-## `LIBNUM_CLSW_PROGTYPE`
+## `LBGN_CLDF_PROGTYPE`
 Must be one of the following values:
 
 | Constant                     | Interpretation |
 | :---                         |     :---       |
-| `LIBNUM_CLSW_PROGTYPE_CONSOLE`              | Program is a console-mode utility (text input, text output). |
-| `LIBNUM_CLSW_PROGTYPE_WINGUI`               | Program is a graphical program under Windows. |
-| `LIBNUM_CLSW_PROGTYPE_TCL_A_CONSOLE`        | Program is Tcl console-mode utility, using Tcl code ported by Dave Ashley around 2004. |
-| `LIBNUM_CLSW_PROGTYPE_TCL_A_GUI`            | Program is Tcl/Tk graphical utility, using Tcl code ported by Dave Ashley around 2004. |
-| `LIBNUM_CLSW_PROGTYPE_TCL_B_CONSOLE`        | Placeholder for future console port of Tcl. |
-| `LIBNUM_CLSW_PROGTYPE_TCL_B_GUI`            | Placeholder for future graphical port of Tcl/Tk. |
-| `LIBNUM_CLSW_PROGTYPE_CLIKE_A_CONSOLE`      | Placeholder for future console application involving _Clike_, a yet to be developed scripting language. |
-| `LIBNUM_CLSW_PROGTYPE_CLIKE_A_GUI`          | Placeholder for future graphical port of _Clike_, a yet to be developed scripting language. |
-| `LIBNUM_CLSW_PROGTYPE_UNIX_SWING`           | Program developed using Unix Swing. |
-| `LIBNUM_CLSW_PROGTYPE_UNIX_AWT`             | Program developed using Unix AWT. |
-| `LIBNUM_CLSW_PROGTYPE_CGIBIN_HELPER`        | Program is invoked by CGI-BIN PHP, Python, or Perl scripts, like to implement functionality awkward under the scripting language. |
-| `LIBNUM_CLSW_PROGTYPE_CGIBIN_HTTPD`         | Program is a CGI-BIN program invoked directly by Apache to answer HTTP[S] requests. |
-| `LIBNUM_CLSW_PROGTYPE_CGIBIN_SERVER`        | Program listens on TCP port(s) and is an actual HTTP[S] server. |
-| `LIBNUM_CLSW_PROGTYPE_UNITTEST_COV`         | Program is a unit test program to test library components and/or measure testing statement/branch coverage. |
-| `LIBNUM_CLSW_PROGTYPE_UNSPECIFIED`          | Program type is not specified. |
+| `LBGN_CLDF_PROGTYPE_CONSOLE`              | Program is a console-mode utility (text input, text output). |
+| `LBGN_CLDF_PROGTYPE_WINGUI`               | Program is a graphical program under Windows. |
+| `LBGN_CLDF_PROGTYPE_TCL_A_CONSOLE`        | Program is Tcl console-mode utility, using Tcl code ported by Dave Ashley around 2004. |
+| `LBGN_CLDF_PROGTYPE_TCL_A_GUI`            | Program is Tcl/Tk graphical utility, using Tcl code ported by Dave Ashley around 2004. |
+| `LBGN_CLDF_PROGTYPE_TCL_B_CONSOLE`        | Placeholder for future console port of Tcl. |
+| `LBGN_CLDF_PROGTYPE_TCL_B_GUI`            | Placeholder for future graphical port of Tcl/Tk. |
+| `LBGN_CLDF_PROGTYPE_CLIKE_A_CONSOLE`      | Placeholder for future console application involving _Clike_, a yet to be developed scripting language. |
+| `LBGN_CLDF_PROGTYPE_CLIKE_A_GUI`          | Placeholder for future graphical port of _Clike_, a yet to be developed scripting language. |
+| `LBGN_CLDF_PROGTYPE_UNIX_SWING`           | Program developed using Unix Swing. |
+| `LBGN_CLDF_PROGTYPE_UNIX_AWT`             | Program developed using Unix AWT. |
+| `LBGN_CLDF_PROGTYPE_CGIBIN_HELPER`        | Program is invoked by CGI-BIN PHP, Python, or Perl scripts, like to implement functionality awkward under the scripting language. |
+| `LBGN_CLDF_PROGTYPE_CGIBIN_HTTPD`         | Program is a CGI-BIN program invoked directly by Apache to answer HTTP[S] requests. |
+| `LBGN_CLDF_PROGTYPE_CGIBIN_SERVER`        | Program listens on TCP port(s) and is an actual HTTP[S] server. |
+| `LBGN_CLDF_PROGTYPE_UNITTEST_COV`         | Program is a unit test program to test library components and/or measure testing statement/branch coverage. |
+| `LBGN_CLDF_PROGTYPE_UNSPECIFIED`          | Program type is not specified. |
 
 ## `LIBNUM_CLSW_THREADS`
 Must be one of the following values:
