@@ -15,7 +15,6 @@ TEST_F(LgBufUint8Test, IsEmptyInitially)
 
    ASSERT_EQ(ts.m_n_allocd, 0);
    ASSERT_EQ(ts.m_n_used,   0);
-   ASSERT_EQ(ts.m_errs,     0);
    ASSERT_EQ(ts.m_bufptr,   nullptr);
 }
 
@@ -28,12 +27,10 @@ TEST_F(LgBufUint8Test, EmptyObjectsCompareEqual)
 
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 
    ASSERT_EQ(ts2.m_n_allocd, 0);
    ASSERT_EQ(ts2.m_n_used, 0);
-   ASSERT_EQ(ts2.m_errs, 0);
    ASSERT_EQ(ts2.m_bufptr, nullptr);
 
    ASSERT_EQ(ts1.Cmp(ts2), 0);
@@ -110,6 +107,7 @@ TEST_F(LgBufUint8Test, SameSizeObjectsComparedOnContent)
    ASSERT_TRUE(ts1 > ts2);
 }
 
+#if 0
 //Checks the error getting and clearing functions.
 TEST_F(LgBufUint8Test, ErrGetAndClear)
 {
@@ -129,8 +127,10 @@ TEST_F(LgBufUint8Test, ErrGetAndClear)
 
    ASSERT_EQ(result, 0);
 }
+#endif
 
 
+#if 0
 //Checks file reading and writing, but happy path only.
 TEST_F(LgBufUint8Test, FreadFwriteHappyPathOnly)
 {
@@ -159,6 +159,7 @@ TEST_F(LgBufUint8Test, FreadFwriteHappyPathOnly)
 
    ASSERT_TRUE(ts1 == ts2);
 }
+#endif
 
 //Checks clearing.
 TEST_F(LgBufUint8Test, ClearTest)
@@ -256,7 +257,6 @@ TEST_F(LgBufUint8Test, ClearAndDeallocateTest)
 
    ASSERT_EQ(ts1.m_n_used, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
 
@@ -476,7 +476,6 @@ TEST_F(LgBufUint8Test, AssignOneEmptyObjSubs0)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -494,7 +493,6 @@ TEST_F(LgBufUint8Test, AssignOneObj1Subs0)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 44);
@@ -513,7 +511,6 @@ TEST_F(LgBufUint8Test, AssignOneObj1Subs1)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 87);
@@ -529,7 +526,6 @@ TEST_F(LgBufUint8Test, AssignObjEmptySubs0NpN0)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -544,7 +540,6 @@ TEST_F(LgBufUint8Test, AssignObjEmptySubs0NpN1)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -559,7 +554,6 @@ TEST_F(LgBufUint8Test, AssignObjEmptySubs0NpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -582,7 +576,6 @@ TEST_F(LgBufUint8Test, AssignObjEmptySubs0NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -612,7 +605,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs0NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -651,7 +643,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs21NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -695,7 +686,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4989NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -749,7 +739,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4990NnpN10)
 
    //Double-check that our actions were successful.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);  //Overallocated.
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -758,7 +747,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4990NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -812,7 +800,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4991NnpN10)
 
    //Double-check that our actions were successful.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);  //Overallocated.
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -821,7 +808,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4991NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -875,7 +861,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4995NnpN10)
 
    //Double-check that our actions were successful.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);  //Overallocated.
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -884,7 +869,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4995NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -938,7 +922,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4999NnpN10)
 
    //Double-check that our actions were successful.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);  //Overallocated.
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -947,7 +930,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs4999NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -1001,7 +983,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs5000NnpN10)
 
    //Double-check that our actions were successful.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);  //Overallocated.
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -1010,7 +991,6 @@ TEST_F(LgBufUint8Test, AssignObjPopSubs5000NnpN10)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= 10000);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -1041,7 +1021,6 @@ TEST_F(LgBufUint8Test, AppendOneHappyPath)
 
    //Double-check that values are as expected.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -1081,7 +1060,6 @@ TEST_F(LgBufUint8Test, AppendHappyPath)
 
    //Check the object control values.
    ASSERT_EQ(ts1.m_n_used, 2500 + sizeof(buf) + 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -1115,7 +1093,6 @@ TEST_F(LgBufUint8Test, InsertOneZeroLengthStartNoPrevAllocValidInsertPt)
    ts1.InsertOne(0, 0xA5);
 
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0xA5);
@@ -1129,7 +1106,6 @@ TEST_F(LgBufUint8Test, InsertOneZeroLengthStartNoPrevAllocInvalidInsertPt1)
    ts1.InsertOne(1, 0xD6);
 
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0xD6);
@@ -1143,7 +1119,6 @@ TEST_F(LgBufUint8Test, InsertOneZeroLengthStartNoPrevAllocInvalidInsertPt2)
    ts1.InsertOne(2, 0xE9);
 
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0xE9);
@@ -1164,7 +1139,6 @@ TEST_F(LgBufUint8Test, InsertOneOccupiedBufIndex0)
    ts1.InsertOne(0, 0x31);
 
    ASSERT_EQ(ts1.m_n_used, 2501);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0x31);
@@ -1189,7 +1163,6 @@ TEST_F(LgBufUint8Test, InsertOneOccupiedBufIndex1)
    ts1.InsertOne(1, 0x31);
 
    ASSERT_EQ(ts1.m_n_used, 2501);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 41);
@@ -1215,7 +1188,6 @@ TEST_F(LgBufUint8Test, InsertOneOccupiedBufIndexLastMinus2)
    ts1.InsertOne(2498, 0xD3);
 
    ASSERT_EQ(ts1.m_n_used, 2501);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 2498; iter++)
@@ -1243,7 +1215,6 @@ TEST_F(LgBufUint8Test, InsertOneOccupiedBufIndexLastMinus1)
    ts1.InsertOne(2499, 0xD4);
 
    ASSERT_EQ(ts1.m_n_used, 2501);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 2499; iter++)
@@ -1270,7 +1241,6 @@ TEST_F(LgBufUint8Test, InsertOneOccupiedBufIndexLast)
    ts1.InsertOne(2500, 0xD5);
 
    ASSERT_EQ(ts1.m_n_used, 2501);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 2500; iter++)
@@ -1296,7 +1266,6 @@ TEST_F(LgBufUint8Test, InsertOneOccupiedBufIndexLastPlus1)
    ts1.InsertOne(2501, 0xD6);
 
    ASSERT_EQ(ts1.m_n_used, 2501);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 2500; iter++)
@@ -1322,7 +1291,6 @@ TEST_F(LgBufUint8Test, InsertOneOccupiedBufIndexLastPlus2)
    ts1.InsertOne(2502, 0xD7);
 
    ASSERT_EQ(ts1.m_n_used, 2501);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 2500; iter++)
@@ -1351,7 +1319,6 @@ TEST_F(LgBufUint8Test, InsertLoc0NullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0);
@@ -1379,7 +1346,6 @@ TEST_F(LgBufUint8Test, InsertLoc0NullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 10; iter++)
@@ -1410,7 +1376,6 @@ TEST_F(LgBufUint8Test, InsertLoc1NullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 67);
@@ -1439,7 +1404,6 @@ TEST_F(LgBufUint8Test, InsertLoc1NullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 71);
@@ -1471,7 +1435,6 @@ TEST_F(LgBufUint8Test, InsertLoc1000NullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 1000; iter++)
@@ -1503,7 +1466,6 @@ TEST_F(LgBufUint8Test, InsertLoc1000NullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 1000; iter++)
@@ -1538,7 +1500,6 @@ TEST_F(LgBufUint8Test, InsertLocObeNullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 4999; iter++)
@@ -1567,7 +1528,6 @@ TEST_F(LgBufUint8Test, InsertLocObeNullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 4999; iter++)
@@ -1602,7 +1562,6 @@ TEST_F(LgBufUint8Test, InsertLocENullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -1630,7 +1589,6 @@ TEST_F(LgBufUint8Test, InsertLocENullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -1661,7 +1619,6 @@ TEST_F(LgBufUint8Test, InsertLocEp1NullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -1689,7 +1646,6 @@ TEST_F(LgBufUint8Test, InsertLocEp1NullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -1720,7 +1676,6 @@ TEST_F(LgBufUint8Test, InsertLocEp1000NullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -1748,7 +1703,6 @@ TEST_F(LgBufUint8Test, InsertLocEp1000NullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -1780,7 +1734,6 @@ TEST_F(LgBufUint8Test, InsertLoc0NonNullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0xD5);
@@ -1815,7 +1768,6 @@ TEST_F(LgBufUint8Test, InsertLoc0NonNullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 10; iter++)
@@ -1847,7 +1799,6 @@ TEST_F(LgBufUint8Test, InsertLoc1NonNullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 37);
@@ -1883,7 +1834,6 @@ TEST_F(LgBufUint8Test, InsertLoc1NonNullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 43);
@@ -1916,7 +1866,6 @@ TEST_F(LgBufUint8Test, InsertLoc1000NonNullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 1000; iter++)
@@ -1955,7 +1904,6 @@ TEST_F(LgBufUint8Test, InsertLoc1000NonNullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 1000; iter++)
@@ -1991,7 +1939,6 @@ TEST_F(LgBufUint8Test, InsertLocObeNonNullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 4999; iter++)
@@ -2027,7 +1974,6 @@ TEST_F(LgBufUint8Test, InsertLocObeNonNullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 4999; iter++)
@@ -2063,7 +2009,6 @@ TEST_F(LgBufUint8Test, InsertLocENonNullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -2098,7 +2043,6 @@ TEST_F(LgBufUint8Test, InsertLocENonNullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -2130,7 +2074,6 @@ TEST_F(LgBufUint8Test, InsertLocEp1NonNullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -2165,7 +2108,6 @@ TEST_F(LgBufUint8Test, InsertLocEp1NonNullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -2197,7 +2139,6 @@ TEST_F(LgBufUint8Test, InsertLocEp1000NonNullPtrQty1)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5001);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -2232,7 +2173,6 @@ TEST_F(LgBufUint8Test, InsertLocEp1000NonNullPtrQty10)
 
    //Verify.
    ASSERT_EQ(ts1.m_n_used, 5010);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    for (iter = 0; iter < 5000; iter++)
@@ -2254,7 +2194,6 @@ TEST_F(LgBufUint8Test, DeleteOneFreshConstructedDp0)
    ts1.DeleteOne(0);
 
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -2268,7 +2207,6 @@ TEST_F(LgBufUint8Test, DeleteOneFreshConstructedDp1)
    ts1.DeleteOne(1);
 
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -2282,7 +2220,6 @@ TEST_F(LgBufUint8Test, DeleteOneFreshConstructedDp2)
    ts1.DeleteOne(2);
 
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -2295,7 +2232,6 @@ TEST_F(LgBufUint8Test, DeleteOneFreshConstructedDp3)
    ts1.DeleteOne(3);
 
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -2311,7 +2247,6 @@ TEST_F(LgBufUint8Test, DeleteOne1ElDp0)
    ts1.DeleteOne(0);
 
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 }
@@ -2327,7 +2262,6 @@ TEST_F(LgBufUint8Test, DeleteOne1ElDp1)
    ts1.DeleteOne(1);
 
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 }
@@ -2343,7 +2277,6 @@ TEST_F(LgBufUint8Test, DeleteOne1ElDp2)
    ts1.DeleteOne(2);
 
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 }
@@ -2359,7 +2292,6 @@ TEST_F(LgBufUint8Test, DeleteOne1ElDp3)
    ts1.DeleteOne(3);
 
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 }
@@ -2376,7 +2308,6 @@ TEST_F(LgBufUint8Test, DeleteOne2ElDp0)
    ts1.DeleteOne(0);
 
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0xC9);
@@ -2394,7 +2325,6 @@ TEST_F(LgBufUint8Test, DeleteOne2ElDp1)
    ts1.DeleteOne(1);
 
    ASSERT_EQ(ts1.m_n_used, 1);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0xD3);
@@ -2412,7 +2342,6 @@ TEST_F(LgBufUint8Test, DeleteOne2ElDp2)
    ts1.DeleteOne(2);
 
    ASSERT_EQ(ts1.m_n_used, 2);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0xD3);
@@ -2431,7 +2360,6 @@ TEST_F(LgBufUint8Test, DeleteOne2ElDp3)
    ts1.DeleteOne(3);
 
    ASSERT_EQ(ts1.m_n_used, 2);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
    ASSERT_EQ(ts1.m_bufptr[0], 0xD3);
@@ -2454,7 +2382,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp0)
    ts1.DeleteOne(0);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2480,7 +2407,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp1)
    ts1.DeleteOne(1);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2510,7 +2436,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp2)
    ts1.DeleteOne(2);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2540,7 +2465,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp500)
    ts1.DeleteOne(500);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2570,7 +2494,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp4998)
    ts1.DeleteOne(4998);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2600,7 +2523,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp4999)
    ts1.DeleteOne(4999);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2626,7 +2548,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp5000)
    ts1.DeleteOne(5000);
 
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2652,7 +2573,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp5001)
    ts1.DeleteOne(5001);
 
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2678,7 +2598,6 @@ TEST_F(LgBufUint8Test, DeleteOne5000ElDp6000)
    ts1.DeleteOne(6000);
 
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2698,7 +2617,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpsDn0)
 
    //Buffer should be unchanged.
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -2713,7 +2631,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpiDn0)
 
    //Buffer should be unchanged.
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_EQ(ts1.m_n_allocd, 0);
    ASSERT_EQ(ts1.m_bufptr, nullptr);
 }
@@ -2735,7 +2652,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpmDn0)
 
    //Buffer should be unchanged.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd > 0);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2762,7 +2678,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpsDn1)
 
    //First element should be missing.
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2789,7 +2704,6 @@ TEST_F(LgBufUint8Test, DeleteOoDp1Dn1)
 
    //Second element should be missing.
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2820,7 +2734,6 @@ TEST_F(LgBufUint8Test, DeleteOoDp2Dn1)
 
    //Second element should be missing.
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2851,7 +2764,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpmidDn1)
 
    //Second element should be missing.
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2882,7 +2794,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpe1Dn1)
 
    //Second element should be missing.
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2913,7 +2824,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpeDn1)
 
    //Second element should be missing.
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2940,7 +2850,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpep1Dn1)
 
    //Second element should be missing.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2967,7 +2876,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpsDn2)
 
    //First element should be missing.
    ASSERT_EQ(ts1.m_n_used, 4998);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -2994,7 +2902,6 @@ TEST_F(LgBufUint8Test, DeleteOoDp1Dn2)
 
    //Second and third elements should be missing.
    ASSERT_EQ(ts1.m_n_used, 4998);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3025,7 +2932,6 @@ TEST_F(LgBufUint8Test, DeleteOoDp2Dn2)
 
    //Third and fourth elements should be missing.
    ASSERT_EQ(ts1.m_n_used, 4998);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3055,7 +2961,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpmidDn2)
    ts1.Delete(2023, 2);
 
    ASSERT_EQ(ts1.m_n_used, 4998);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3086,7 +2991,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpe2Dn2)
 
    //4997 and 4998 should be missing, 4999 in place.
    ASSERT_EQ(ts1.m_n_used, 4998);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3117,7 +3021,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpe1Dn2)
 
    //4998 and 4999 should be missing.
    ASSERT_EQ(ts1.m_n_used, 4998);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3144,7 +3047,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpeDn2)
    ts1.Delete(4999, 2);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3171,7 +3073,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpep1Dn2)
 
    //Second element should be missing.
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3198,7 +3099,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpsDn100)
 
    //First element should be missing.
    ASSERT_EQ(ts1.m_n_used, 4900);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3224,7 +3124,6 @@ TEST_F(LgBufUint8Test, DeleteOoDp1Dn100)
    ts1.Delete(1, 100);
 
    ASSERT_EQ(ts1.m_n_used, 4900);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3255,7 +3154,6 @@ TEST_F(LgBufUint8Test, DeleteOoDp2Dn100)
 
    //Third and fourth elements should be missing.
    ASSERT_EQ(ts1.m_n_used, 4900);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3285,7 +3183,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpmidDn100)
    ts1.Delete(2023, 100);
 
    ASSERT_EQ(ts1.m_n_used, 4900);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3318,7 +3215,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpe100Dn100)
 
    //4997 and 4998 should be missing, 4999 in place.
    ASSERT_EQ(ts1.m_n_used, 4900);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3350,7 +3246,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpe99Dn100)
 
    //4997 and 4998 should be missing, 4999 in place.
    ASSERT_EQ(ts1.m_n_used, 4900);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3378,7 +3273,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpe98Dn100)
 
    //4997 and 4998 should be missing, 4999 in place.
    ASSERT_EQ(ts1.m_n_used, 4901);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3405,7 +3299,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpe1Dn100)
    ts1.Delete(4998, 100);
 
    ASSERT_EQ(ts1.m_n_used, 4998);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3432,7 +3325,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpe0Dn100)
    ts1.Delete(4999, 100);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3458,7 +3350,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpep1Dn100)
    ts1.Delete(5000, 100);
 
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3485,7 +3376,6 @@ TEST_F(LgBufUint8Test, DeleteOoDpsDn10000)
    ts1.Delete(0, 10000);
 
    ASSERT_EQ(ts1.m_n_used, 0);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 }
@@ -3510,7 +3400,6 @@ TEST_F(LgBufUint8Test, ReadAndDeleteOneHappyPath)
    ASSERT_EQ(rv, 20 + 17);
 
    ASSERT_EQ(ts1.m_n_used, 4999);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3542,7 +3431,6 @@ TEST_F(LgBufUint8Test, ReadAndDeleteOneInvalidSubscript)
    rv = ts1.ReadAndDeleteOne(5000);
 
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3582,7 +3470,6 @@ TEST_F(LgBufUint8Test, ReadAndDeleteHappyPath)
    ASSERT_EQ(buf[9], 0xAC);
 
    ASSERT_EQ(ts1.m_n_used, 4991);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3626,7 +3513,6 @@ TEST_F(LgBufUint8Test, ReadAndDeleteInvalidPoint)
    ASSERT_EQ(buf[9], 0xAC);
 
    ASSERT_EQ(ts1.m_n_used, 5000);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 
@@ -3676,7 +3562,6 @@ TEST_F(LgBufUint8Test, ReadAndDeletePartialOverhang)
    }
 
    ASSERT_EQ(ts1.m_n_used, 4994);
-   ASSERT_EQ(ts1.m_errs, 0);
    ASSERT_TRUE(ts1.m_n_allocd >= ts1.m_n_used);
    ASSERT_TRUE(ts1.m_bufptr != nullptr);
 

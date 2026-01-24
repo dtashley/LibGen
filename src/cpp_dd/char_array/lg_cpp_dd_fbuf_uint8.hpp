@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-//Header file for Unsigned 8-bit integer buffer, RAM-based.
+//Header for unsigned 8-bit integer file buffer, RAM-based.
 //--------------------------------------------------------------------------------------------------
 //This file is part of LibGen, https://github.com/dtashley/LibGen, and is provided
 //under The Unlicense, reproduced below.
@@ -29,14 +29,33 @@
 //
 //For more information, please refer to <https://unlicense.org>
 //--------------------------------------------------------------------------------------------------
-#ifndef LG_CPP_DD_BUF_UINT8_HPP_INCLUDED
-#define LG_CPP_DD_BUF_UINT8_HPP_INCLUDED
+#ifndef LG_CPP_DD_FBUF_UINT8_HPP_INCLUDED
+#define LG_CPP_DD_FBUF_UINT8_HPP_INCLUDED
 
 #include <cstdint>
 #include <string>
 
-//!< \class LgBufUint8
-//!< Provides a buffer of <i>uint8_t</i>.  Typically used for buffering files and
+#include "lg_cpp_dd_buf_uint8.hpp"
+
+//Errors that can be stored.  Multiple errors are or'd together.
+#define LG_CPP_DD_FBUF_UINT8_ERR_FINFO    (0x01U)
+#define LG_CPP_DD_FBUF_UINT8_ERR_FOPEN    (0x02U)
+#define LG_CPP_DD_FBUF_UINT8_ERR_FREAD    (0x04U)
+#define LG_CPP_DD_FBUF_UINT8_ERR_FWRITE   (0x08U)
+#define LG_CPP_DD_FBUF_UINT8_ERR_FCLOSE   (0x10U)
+#define LG_CPP_DD_FBUF_UINT8_ERR_ACCESS   (0x20U)
+#define LG_CPP_DD_FBUF_UINT8_ERR_INTERNAL (0x40U)
+
+//! Enumeration to describe the state of a <i>LgFbufUint8</i>
+enum class LgFbufUint8State
+{
+   Unocccupied, //!< Buffer empty, not bound to file.
+   Occupied,    //!< File has been read, bound to file.
+   Error,       //!< Error has occurred, awaiting recovery.
+};
+
+//!< \class LgFbufUint8
+//!< Provides a file buffer of <i>uint8_t</i>.  Typically used for buffering files and
 //!< maninpulating the content.  Content buffered may be binary or text--no assumptions
 //!< are made about content.
 //!< 
@@ -49,58 +68,52 @@
 //!< No easy way could be found to keep a file open between the Fread()
 //!< and the Fwrite(). For now accept the typical behavior of opening a file,
 //!< reading it, closing it, opening it, writing it, then closing it.
-class LgBufUint8
+class LgFbufUint8
 {
    #ifndef UT_GTEST
    private:
    #else
    public:
    #endif
-      size_t m_n_allocd;
-         //!< The number of bytes allocated.  If this value is non-zero, <i>m_bufptr</i> must be non-<i>nullptr</i>.
-         //!< If this value is zero, <i>m_bufptr</i> must be <i>nullptr</i>.
-         //!<
-         //!< This value is not required to be a multiple of any specific value.  However, for
-         //!< most manipulations, the number of elements allocated is increased and decreased in multiples of
-         //!< <i>LG_CPP_DD_BUF_UINT8_ALLOC_INCREMENT</i> (a private constant), for efficiency.
-      size_t m_n_used;
-         //!< The number of bytes used in <i>m_bufptr[]</i>, starting from element [0].
-         //!< Valid indices to access <i>m_bufptr[]</i> range from 0 through <i>m_n_used</i>-1.
-      uint8_t *m_bufptr;
-         //!< Pointer to the start of the buffer, a one-dimensional array of <i>uint8_t</i>.
-         //!< This value be <i>nullptr</i> if <i>m_n_allocd</i> is 0, and not <i>nullptr</i>
-         //!< if <i>m_n_allocd</i> is not 0.
-   public:
+      enum class LgFbufUint8State m_state;
+         //!< Major state of the file buffer.
+      unsigned m_errs;
+         //!< Cumulative errors encountered and that should be reported to the client, if polled,
+         //!< maintained as a bitmask of individual errors that have occurred.  If errors exist,
+         //!< the member functions will still try to operate as fully as possible.
+         //!< Any error involving memory exhaustion will be generate an exception from a lower
+         //!< layer that percolates up out of this class, and not be recorded here.
+      std::string m_fname;
+         //!< Filename from which the buffer contents were read, and to which the buffer contents
+         //!< will be written by default if the choice is not overridden.  May be changed by the
+         //!< user on demand.
+      LgBufUint8 m_buf;
+         //!< Buffer in RAM containing the bytes of the file.
+public:
       //Fundamental constructors/destructors
-      LgBufUint8() noexcept;
-      ~LgBufUint8() noexcept;
-      LgBufUint8(const LgBufUint8 &buf);
-      LgBufUint8& operator=(const LgBufUint8& buf);
-      LgBufUint8(LgBufUint8&& buf) noexcept;
-      LgBufUint8& operator=(LgBufUint8&& buf) noexcept;
+      LgFbufUint8() noexcept;
+      ~LgFbufUint8() noexcept;
+      LgFbufUint8(const LgFbufUint8 &fbuf);
+      LgFbufUint8& operator=(const LgFbufUint8& buf);
+      LgFbufUint8(LgFbufUint8&& buf) noexcept;
+      LgFbufUint8& operator=(LgFbufUint8&& buf) noexcept;
 
       //Overloaded constructors
       //
       //Comparisons
-      int Cmp(const LgBufUint8& other) const noexcept;
-      bool operator<(const LgBufUint8& other) const noexcept;
-      bool operator<=(const LgBufUint8& other) const noexcept;
-      bool operator==(const LgBufUint8& other) const noexcept;
-      bool operator!=(const LgBufUint8& other) const noexcept;
-      bool operator>=(const LgBufUint8& other) const noexcept;
-      bool operator>(const LgBufUint8& other) const noexcept;
+      int Cmp(const LgFbufUint8& other) const noexcept;
+      bool operator<(const LgFbufUint8& other) const noexcept;
+      bool operator<=(const LgFbufUint8& other) const noexcept;
+      bool operator==(const LgFbufUint8& other) const noexcept;
+      bool operator!=(const LgFbufUint8& other) const noexcept;
+      bool operator>=(const LgFbufUint8& other) const noexcept;
+      bool operator>(const LgFbufUint8& other) const noexcept;
 
       //Optional member functions
-      void AllocateAtLeast(size_t nbytes);
-      void SetNelem(size_t nbytes);
-      /*!
-       * \brief Returns the pointer to the internal buffer.  Used only for file read and
-       *        write operations.
-       */
-      uint8_t *GetBufPtr(void) const noexcept
-      {
-          return m_bufptr;
-      }
+      unsigned ErrsGet() const noexcept;
+      void ErrsClear() noexcept;
+      bool Fread(const std::string& fname);
+      bool Fwrite(const std::string& fname);
       void Clear() noexcept;
       void Trim();
       void ClearAndDeallocate() noexcept;
@@ -110,7 +123,14 @@ class LgBufUint8
        */
       size_t Nelem() const noexcept
       {
-         return m_n_used;
+         return m_buf.Nelem();
+      }
+      /*!
+       * \brief Returns the filename string.  Implemented inline for performance.
+       */
+      std::string GetFilename(void) const
+      {
+          return m_fname;
       }
       /*! \brief Subscript operator overload for write operations.  Must not be
        *         used beyond <i>m_n_used</i> - 1, or the ordinary memory access
@@ -118,7 +138,7 @@ class LgBufUint8
        */
       uint8_t& operator[] (size_t index) noexcept
       {
-         return m_bufptr[index];
+         return m_buf.m_bufptr[index];
       }
       /*! \brief Subscript operator overload for read operations.  Must not be
        *         used beyond <i>m_n_used</i> - 1, or the ordinary memory access
@@ -126,7 +146,7 @@ class LgBufUint8
        */
       const uint8_t& operator[] (size_t index) const noexcept
       {
-         return m_bufptr[index];
+         return m_buf.m_bufptr[index];
       }
       uint8_t ReadOneByVal(const size_t read_pt) const noexcept;
       void ReadOne(const size_t read_pt, uint8_t* const read_dst) const noexcept;
@@ -146,4 +166,4 @@ class LgBufUint8
 
 #endif
 
-//End of lg_cpp_dd_buf_uint8.hpp.
+//End of lg_cpp_dd_fbuf_uint8.hpp.

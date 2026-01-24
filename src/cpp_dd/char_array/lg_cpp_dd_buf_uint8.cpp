@@ -45,7 +45,7 @@
 
 #include "lg_cpp_cm_fio.hpp"
 #include "lg_cpp_dd_charf.hpp"
-#include "lg_cpp_dd_malloc.hpp"
+#include "lg_cpp_dd_malloc_alt.hpp"
 #include "lg_cpp_dd_size_t.hpp"
 
 //In order for this class to work correctly, there must be 8 bits per character.
@@ -72,7 +72,6 @@
  */
 LgBufUint8::LgBufUint8() noexcept : m_n_allocd{ 0 },
                                     m_n_used{ 0 }, 
-                                    m_errs{ 0 }, 
                                     m_bufptr{nullptr}
 {
 }
@@ -89,8 +88,7 @@ LgBufUint8::~LgBufUint8() noexcept
 {
    m_n_allocd = 0;
    m_n_used   = 0;
-   m_errs     = 0;
-   LgCppCm_MallocFree(m_bufptr);  //Called function handles nullptr case.
+   LgCppCm_MallocAltFree(m_bufptr);  //Called function handles nullptr case.
    m_bufptr   = nullptr;
 }
 
@@ -110,7 +108,6 @@ LgBufUint8::LgBufUint8(const LgBufUint8& buf)
                                                      LG_CPP_DD_BUF_UINT8_ALLOC_INCREMENT);
       //Ignore what the caller had allocated in favor of what is best.
       //This automatically trims.
-   m_errs = buf.m_errs;
    if (m_n_allocd == 0)
    {
       //In this case, nullptr.
@@ -118,7 +115,7 @@ LgBufUint8::LgBufUint8(const LgBufUint8& buf)
    }
    else
    {
-      m_bufptr = (uint8_t*)LgCppCm_MallocMalloc(m_n_allocd);
+      m_bufptr = (uint8_t*)LgCppCm_MallocAltMalloc(m_n_allocd);
    }
 
    //Copy the memory.  Although memcpy() likely guards against dereferencing
@@ -153,14 +150,13 @@ LgBufUint8& LgBufUint8::operator=(const LgBufUint8& buf)
       //downsize, as that is inefficient.
       if (m_n_allocd < necessary_allocation)
       {
-         m_bufptr = (uint8_t*)LgCppCm_MallocRealloc(m_bufptr, necessary_allocation);
+         m_bufptr = (uint8_t*)LgCppCm_MallocAltRealloc(m_bufptr, necessary_allocation);
             //nullptr case handled correctly.
          m_n_allocd = necessary_allocation;
       }
 
       //Copy the remaining fields and memory.
       m_n_used = buf.m_n_used;
-      m_errs   = buf.m_errs;
 
       //Be cautious on the copy.  memcpy() probably does not dreference
       //memory on a count of 0, but take no chances.
@@ -184,13 +180,11 @@ LgBufUint8::LgBufUint8(LgBufUint8&& buf) noexcept
    //Bring over data fields and resources.
    m_n_allocd     = buf.m_n_allocd;
    m_n_used       = buf.m_n_used;
-   m_errs         = buf.m_errs;
    m_bufptr       = buf.m_bufptr;  //Snatch buffer pointer, allocated or not.
 
    //Prepare the source object for clean destruction.
    buf.m_n_allocd = 0;
    buf.m_n_used   = 0;
-   buf.m_errs     = 0;
    buf.m_bufptr   = nullptr;
 }
 
@@ -208,18 +202,16 @@ LgBufUint8::LgBufUint8(LgBufUint8&& buf) noexcept
    {
       //Deallocate the target buffer, if it was allocated.
       if (m_bufptr)
-         LgCppCm_MallocFree(m_bufptr);
+         LgCppCm_MallocAltFree(m_bufptr);
 
       //Bring over data fields and resources.
       m_n_allocd = buf.m_n_allocd;
       m_n_used   = buf.m_n_used;
-      m_errs     = buf.m_errs;
       m_bufptr   = buf.m_bufptr;  //Snatch buffer pointer, allocated or not.
 
       //Prepare the source object for clean destruction.
       buf.m_n_allocd = 0;
       buf.m_n_used   = 0;
-      buf.m_errs     = 0;
       buf.m_bufptr   = nullptr;
    }
 
@@ -398,225 +390,60 @@ bool LgBufUint8::operator>(const LgBufUint8& other) const noexcept
 
 
 /*!
- * \brief                       Returns the errors set for the object. Errors are packed into the return value, or'd together
- *                              as bit flags.
+ * \brief Allocates the buffer upwards to be at least the requested
+ *        size.  The buffer will not be allocated downwards.
  *
- *                              The errors include  LG_CPP_DD_BUF_UINT8_ERR_FINFO
- *                              and other similarly prefixed constants nearby in the code.
- * 
- *                              A return value of 0 indicates that no errors have been encountered.
- * 
- *                              Errors stick until cleared with the <i>ErrsClear()</i> method.
- *
- * \reentrancyandthreadsafety   Not evaluated.
- *
- * \errorsandexceptions         No errors or exceptions are possible.
- */
-unsigned LgBufUint8::ErrsGet() const noexcept
-{
-   return m_errs;
-}
-
-
-/*!
- * \brief                       Clears any recorded errors in the object.
- *
- * \reentrancyandthreadsafety   Not evaluated.
- *
- * \errorsandexceptions         No errors or exceptions are possible.
- */
-void LgBufUint8::ErrsClear() noexcept
-{
-   m_errs = 0;
-}
-
-
-/*!
- * \brief Reads from a file, in binary mode, into the object; and closes
- *        the file after it has been fully read.  Returns <i>true</i>
- *        on success or <i>false</i> on failure.
- *
- *        Errors are possible when gathering information about the file,
- *        when opening it, when reading it, or when closing it.  Such errors are recorded using
- *        the error recording mechanism for the object, and the function
- *        continues as best it can.
- *
- * \param[in]     fname          The name of the file from which to read.  This parameter
- *                               is not examined by this function:  whether the filename is
- *                               valid is decided solely by the operating system.
- * 
- * \returns                      <i>true</i> if the operation (info, open, read, close) is fully successful,
- *                               or <i>false</i> otherwise.
+ * \param[in]     nbytes         The size to allocate upwards to.  0 is an acceptable
+ *                               value.
  *
  * \reentrancyandthreadsafety    Not evaluated.
  *
- * \errorsandexceptions          Errors are possible when gathering information about the file,
- *                               opening the file, reading the file, or closing the file.  Any of those errors
- *                               will be reported through the error recording mechanism of the
- *                               object.
- *                               <br><br>
- *                               It is possible for an allocation failure to occur while the
- *                               object is grown to accommodate the file contents.  This would result
- *                               in a <i>std::bad_alloc</i> exception.
+ * \errorsandexceptions          Out of memory is a possible exception.
  */
-bool LgBufUint8::Fread(const std::string& fname)
+void LgBufUint8::AllocateAtLeast(size_t nbytes)
 {
-   std::ifstream infile;
-   size_t file_size;
    size_t new_allocation;
 
-   infile.open(fname, std::ios::binary);
-      //Discovered experimentally that need to open as binary or line endings get translated,
-      //and perhaps other changes made as well.
-
-   if (!infile.is_open())
-   {
-      //Something has gone wrong.  Error out.
-      m_errs |= LG_CPP_DD_BUF_UINT8_ERR_FOPEN;
-
-      //Try to close, unsure if necessary.
-      infile.close();
-
-      //Return as-is.
-      return false;
-   }
-
-   //Figure out how big the file is.
-   infile.seekg(0, std::ios::end);                                   //Seek to end of file.
-   file_size = LgCppDd_SizeT_StreamposToSizeT(infile.tellg());       //Obtain the file size, convert to size_t.
-   infile.seekg(0, std::ios::beg);                                   //Seek back to the beginning so we can read it from there.
-
-   //If the file size is 0, we can take an abbreviated path.
-   if (file_size == 0)
-   {
-      infile.close();
-
-      m_n_used = 0;  //Allocation doesn't matter with zero length.  No other field
-                     //needs to be set.
-
-      return true;
-   }
-
-   //If the file size is non-zero, adjust the allocation appropriately.
-   new_allocation = LgCppDd_SizeT_LeastMulNotSmallerThan(file_size,
-                                                         LG_CPP_DD_BUF_UINT8_ALLOC_INCREMENT);
+   new_allocation = LgCppDd_SizeT_LeastMulNotSmallerThan(nbytes, LG_CPP_DD_BUF_UINT8_ALLOC_INCREMENT);
 
    //Adjust allocation upward if necessary.  Do not down-allocate.
    if (new_allocation > m_n_allocd)
    {
       if (m_bufptr == nullptr)
       {
-         m_bufptr   = (uint8_t*)LgCppCm_MallocMalloc(new_allocation);
+         m_bufptr = (uint8_t*)LgCppCm_MallocAltMalloc(new_allocation);
          m_n_allocd = new_allocation;
       }
       else
       {
-         m_bufptr = (uint8_t*)LgCppCm_MallocRealloc(m_bufptr, new_allocation);
+         m_bufptr = (uint8_t*)LgCppCm_MallocAltRealloc(m_bufptr, new_allocation);
          m_n_allocd = new_allocation;
       }
    }
-
-   //If the file size is non-zero, read the file, close, return.
-   m_n_used   = file_size;
-
-   infile.read((char*)m_bufptr, file_size);
-
-   //Check for read errors.  If one occurred, error out.
-   if (infile.fail())
-   {
-      //Error reading stream.
-      m_errs |= LG_CPP_DD_BUF_UINT8_ERR_FREAD;
-      infile.close();
-      return false;
-   }
-
-   infile.close();
-
-   //Check for file close errors.  If one occurred, error out.
-   if (infile.fail())
-   {
-      //Error closing stream.
-      m_errs |= LG_CPP_DD_BUF_UINT8_ERR_FCLOSE;
-      return false;
-   }
-
-   return true;
 }
 
 
 /*!
- * \brief Writes an object to a file, in binary mode; and closes
- *        the file after it has been fully written.  Returns <i>true</i>
- *        on success or <i>false</i> on failure.
+ * \brief Sets the number of elements of a buffer to be the specified number.
+ *        If the specified number is larger than the number currently allocated,
+ *        the number of elements will be set to the number allocated.
  *
- *        Other than recording any errors, the object is not modified.
- * 
- *        Errors are possible when gathering information about the file,
- *        when writing it, or when closing it.  Such errors are recorded using
- *        the error recording mechanism for the object, and the function
- *        continues as best it can.
- *
- * \param[in]     fname          The name of the file to which to write the object.  This parameter
- *                               is not examined by this function:  whether the filename is
- *                               valid is decided solely by the operating system.
- *
- * \returns                      <i>true</i> if the operation (open, write, close) is fully successful,
- *                               or <i>false</i> otherwise.
+ * \param[in]     nbytes         The number of elements to set the number of elements to.
  *
  * \reentrancyandthreadsafety    Not evaluated.
  *
- * \errorsandexceptions          Errors are possible when opening the file,
- *                               writing the file, or closing the file.  Any of those errors
- *                               will be reported through the error recording mechanism of the
- *                               object.
+ * \errorsandexceptions          Out of memory is a possible exception.
  */
-bool LgBufUint8::Fwrite(const std::string &fname)
+void LgBufUint8::SetNelem(size_t nbytes)
 {
-   std::ofstream outfile;
-
-   outfile.open(fname, std::ios::binary);
-      //Discovered experimentally that need to open as binary to prevent translations.
-
-   if (!outfile.is_open())
+   if (nbytes > m_n_allocd)
    {
-      //Something has gone wrong.  Error out.
-      m_errs |= LG_CPP_DD_BUF_UINT8_ERR_FOPEN;
-
-      //Try to close, unsure if necessary.
-      outfile.close();
-
-      //Return as-is.
-      return false;
+      m_n_used = m_n_allocd;
    }
-
-   //Write the file.  We can write the entire file all at once.
-   //Since this is a member function, we know that the representation
-   //is compatible with write.
-   if ((m_n_used > 0) && (m_bufptr != nullptr)) //Caution with zero-length writes and null pointers.
+   else
    {
-      outfile.write((char *)m_bufptr, m_n_used);
-
-      //Check for write errors.  If one occurred, error out.
-      if (outfile.fail())
-      {
-         //Error reading stream.
-         m_errs |= LG_CPP_DD_BUF_UINT8_ERR_FWRITE;
-         outfile.close();
-         return false;
-      }
+      m_n_used = nbytes;
    }
-
-   outfile.close();
-
-   //Check for file close errors.  If one occurred, error out.
-   if (outfile.fail())
-   {
-      //Error closing stream.
-      m_errs |= LG_CPP_DD_BUF_UINT8_ERR_FCLOSE;
-      return false;
-   }
-
-   return true;
 }
 
 
@@ -630,7 +457,6 @@ bool LgBufUint8::Fwrite(const std::string &fname)
 void LgBufUint8::Clear() noexcept
 {
    m_n_used = 0;
-   m_errs   = 0;
 
    //No need to adjust anything else.
 }
@@ -659,7 +485,7 @@ void LgBufUint8::Trim()
          if (m_bufptr)
          {
             //Previously allocated, free it.
-            LgCppCm_MallocFree(m_bufptr);
+            LgCppCm_MallocAltFree(m_bufptr);
             m_bufptr = nullptr;
 
             m_n_allocd = new_amount_allocated;
@@ -678,7 +504,7 @@ void LgBufUint8::Trim()
          if (m_bufptr)
          {
             //Need to reallocate.  Exception will be thrown if failure.
-            m_bufptr = (uint8_t *)LgCppCm_MallocRealloc(m_bufptr, new_amount_allocated);
+            m_bufptr = (uint8_t *)LgCppCm_MallocAltRealloc(m_bufptr, new_amount_allocated);
 
             m_n_allocd = new_amount_allocated;
          }
@@ -704,8 +530,7 @@ void LgBufUint8::ClearAndDeallocate() noexcept
 {
    m_n_allocd = 0;
    m_n_used   = 0;
-   m_errs     = 0;
-   LgCppCm_MallocFree(m_bufptr); //Called function handles nullptr case.
+   LgCppCm_MallocAltFree(m_bufptr); //Called function handles nullptr case.
    m_bufptr   = nullptr;
 }
 
@@ -967,7 +792,7 @@ void LgBufUint8::AppendOne(const uint8_t appendee)
       //downward, as  that would be inefficient.
       if (proposed_allocation > m_n_allocd)
       {
-         m_bufptr = (uint8_t*)LgCppCm_MallocRealloc(m_bufptr, proposed_allocation);
+         m_bufptr = (uint8_t*)LgCppCm_MallocAltRealloc(m_bufptr, proposed_allocation);
             //nullptr case covered by called function.
          m_n_allocd = proposed_allocation;
       }
@@ -1023,7 +848,7 @@ void LgBufUint8::Append(const uint8_t* const append_src, const size_t append_n)
       //If allocation needs to be adjusted upward, reallocate.
       if (required_allocation > m_n_allocd)
       {
-         m_bufptr = (uint8_t*)LgCppCm_MallocRealloc(m_bufptr, required_allocation);
+         m_bufptr = (uint8_t*)LgCppCm_MallocAltRealloc(m_bufptr, required_allocation);
             //nullptr case covered by called function.
          m_n_allocd = required_allocation;
       }
@@ -1078,7 +903,7 @@ void LgBufUint8::InsertOne(const size_t insert_pt, const uint8_t insertee)
       //We don't allocate down, as this would be inefficient.
       if (needed_allocation > m_n_allocd)
       {
-         m_bufptr = (uint8_t*)LgCppCm_MallocRealloc(m_bufptr, needed_allocation);
+         m_bufptr = (uint8_t*)LgCppCm_MallocAltRealloc(m_bufptr, needed_allocation);
            //nullptr case covered by called function.
 
          //There is now this much allocated.
@@ -1173,7 +998,7 @@ void LgBufUint8::Insert(size_t insert_pt, const uint8_t* const insert_src, const
       //that would be very inefficient.
       if (required_allocation > m_n_allocd)
       {
-         m_bufptr = (uint8_t*)LgCppCm_MallocRealloc(m_bufptr, required_allocation);
+         m_bufptr = (uint8_t*)LgCppCm_MallocAltRealloc(m_bufptr, required_allocation);
             //nullptr case covered by called function.
          m_n_allocd = required_allocation;
       }
@@ -1447,7 +1272,6 @@ void LgBufUint8::DebugWrite(std::ostream& outstream, const std::string& title, c
    outstream << "m_n_allocd    : " << m_n_allocd << "\n";
    outstream << "m_n_used      : " << m_n_used   << "\n";
    outstream << "m_bufptr      : " << (unsigned long long)m_bufptr   << "\n";
-   outstream << "m_errs        : " << m_errs     << "\n";
    for (i = 0; i < m_n_used; i++)
    {
       outstream << "[" << std::setw(10) << i << "] ";

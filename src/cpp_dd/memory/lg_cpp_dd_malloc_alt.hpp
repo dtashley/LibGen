@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------
-//C++ data-driven functions, wrapper around malloc() family of functions, with the ability to
-//throw an exception if out of memory.
+//C++ data-driven functions, wrapper around malloc() family of functions with alternate API,
+//with the ability to throw an exception if out of memory.
 //--------------------------------------------------------------------------------------------------
 //This file is part of LibGen, https://github.com/dtashley/LibGen, and is provided
 //under The Unlicense, reproduced below.
@@ -30,15 +30,15 @@
 //
 //For more information, please refer to <https://unlicense.org>
 //--------------------------------------------------------------------------------------------------
-#ifndef LG_CPP_DD_MALLOC_H_INCLUDED
-   #define LG_CPP_DD_MALLOC_H_INCLUDED
+#ifndef LG_CPP_DD_MALLOC_ALT_H_INCLUDED
+   #define LG_CPP_DD_MALLOC_ALT_H_INCLUDED
 
    #include <malloc.h>
 
-   extern void* LgCppCm_MallocMalloc(size_t in_size);
-   extern void* LgCppCm_MallocCalloc(size_t in_num, size_t in_size);
-   extern void* LgCppCm_MallocRealloc(void* in_memblock, size_t in_size);
-   extern void  LgCppCm_MallocFree(void* in_memblock);
+   extern void* LgCppCm_MallocAltMalloc(size_t in_size);
+   extern void* LgCppCm_MallocAltCalloc(size_t in_num, size_t in_size);
+   extern void* LgCppCm_MallocAltRealloc(void* in_memblock, size_t in_size);
+   extern void  LgCppCm_MallocAltFree(void* in_memblock);
 #endif
 
 //End of lg_cpp_dd_malloc_alt.hpp.
