@@ -13,9 +13,9 @@
 //
 //In jurisdictions that recognize copyright laws, the author or authors
 //of this software dedicate any and all copyright interest in the
-//software to the public domain.We make this dedication for the benefit
+//software to the public domain. We make this dedication for the benefit
 //of the public at large and to the detriment of our heirs and
-//successors.We intend this dedication to be an overt act of
+//successors. We intend this dedication to be an overt act of
 //relinquishment in perpetuity of all present and future rights to this
 //software under copyright law.
 //
@@ -35,7 +35,7 @@
 #include <cstdint>
 #include <string>
 
-//Errors that can be stored.  Multiple errors are or'd together.
+//Errors that can be reported.  Multiple errors are or'd together.
 #define LG_CPP_DD_BUF_UINT8_ERR_FINFO    (0x01U)
 #define LG_CPP_DD_BUF_UINT8_ERR_FOPEN    (0x02U)
 #define LG_CPP_DD_BUF_UINT8_ERR_FREAD    (0x04U)
@@ -75,12 +75,6 @@ class LgBufUint8
       size_t m_n_used;
          //!< The number of bytes used in <i>m_bufptr[]</i>, starting from element [0].
          //!< Valid indices to access <i>m_bufptr[]</i> range from 0 through <i>m_n_used</i>-1.
-      unsigned m_errs;
-         //!< Cumulative errors encountered and that should be reported to the client, if polled,
-         //!< maintained as a bitmask of individual errors that have occurred.  If errors exist,
-         //!< the member functions will still try to operate as fully as possible.
-         //!< Any error involving memory exhaustion will be generate an exception from a lower
-         //!< layer that percolates up out of this class, and not be recorded here.
       uint8_t *m_bufptr;
          //!< Pointer to the start of the buffer, a one-dimensional array of <i>uint8_t</i>.
          //!< This value be <i>nullptr</i> if <i>m_n_allocd</i> is 0, and not <i>nullptr</i>
@@ -106,10 +100,19 @@ class LgBufUint8
       bool operator>(const LgBufUint8& other) const noexcept;
 
       //Optional member functions
-      unsigned ErrsGet() const noexcept;
-      void ErrsClear() noexcept;
-      bool Fread(const std::string& fname);
-      bool Fwrite(const std::string& fname);
+      void AllocateAtLeast(size_t nbytes);
+      void SetNelem(size_t nbytes);
+      /*!
+       * \brief Returns the pointer to the internal buffer.  Used only for file read and
+       *        write operations.
+       */
+      uint8_t *GetBufPtr(void) const noexcept
+      {
+          return m_bufptr;
+      }
+      void Fread(const std::string& in_fname,
+                 bool& out_success, uint32_t& out_errmask, std::string& out_errdesc);
+      void Fwrite(const std::string& in_fname, bool& out_success, uint32_t& out_errmask, std::string& out_errdesc) const;
       void Clear() noexcept;
       void Trim();
       void ClearAndDeallocate() noexcept;
