@@ -114,7 +114,7 @@ public:
       void ErrsClear() noexcept;
       bool Fread(const std::string& fname);
       bool Fwrite(const std::string& fname);
-      void Clear() noexcept;
+      void Clear();
       void Trim();
       void ClearAndDeallocate() noexcept;
       /*!

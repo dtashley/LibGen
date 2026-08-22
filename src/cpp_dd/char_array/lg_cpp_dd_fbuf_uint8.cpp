@@ -544,14 +544,18 @@ bool LgFbufUint8::Fwrite(const std::string &fname)
 
 
 /*!
- * \brief                        Sets a buffer to zero length and clears errors, but does not deallocate any allocated memory.
+ * \brief                        Sets a buffer to zero length, clears errors, sets state to unoccupied,
+ *                               but does not deallocate any allocated memory in the buffer.
  *
  * \reentrancyandthreadsafety    Not evaluated.
  * 
- * \errorsandexceptions          No exceptions or errors are possible.
+ * \errorsandexceptions          An exception may be possible with std::string.  This is unknown.
  */
-void LgFbufUint8::Clear() noexcept
+void LgFbufUint8::Clear()
 {
+   m_state = LgFbufUint8State::Unocccupied;
+   m_errs  = 0;
+   m_fname = ""; //Exception may be possible.  This is unknown.
    m_buf.Clear();
 }
 
@@ -581,7 +585,10 @@ void LgFbufUint8::Trim()
  */
 void LgFbufUint8::ClearAndDeallocate() noexcept
 {
-   m_buf.ClearAndDeallocate();
+    m_state = LgFbufUint8State::Unocccupied;
+    m_errs  = 0;
+    m_fname = ""; //Exception may be possible.  This is unknown.
+    m_buf.ClearAndDeallocate();
 }
 
 

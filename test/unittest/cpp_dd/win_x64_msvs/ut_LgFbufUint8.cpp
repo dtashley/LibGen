@@ -187,6 +187,216 @@ TEST_F(LgFbufUint8Test, LessThanOperatorCheck01)
 }
 
 
+//Check that the less or equal operator seems to function.
+TEST_F(LgFbufUint8Test, LessThanOrEqualOperatorCheck01)
+{
+    const char* fname = "ut_LgVerbosity.cpp";
+    LgFbufUint8 freference, fequal, flessthan;
+    bool bresult = false;
+    std::string fname_extracted;
+
+    //Read a known existing file into ts0.
+    bresult = freference.Fread(fname);
+    ASSERT_TRUE(bresult);
+
+    //Copy to a second object.
+    fequal = flessthan = freference;
+
+    //Double-check important parameters of the first object.  The second and third objects are assumed identical.
+    ASSERT_EQ(freference.m_state, LgFbufUint8State::Occupied);
+    ASSERT_EQ(freference.m_errs, 0);
+    ASSERT_TRUE(freference.m_buf.m_n_used > 0);
+    ASSERT_TRUE(freference.m_buf.m_n_allocd >= freference.m_buf.m_n_used);
+    fname_extracted = freference.GetFilename();
+    ASSERT_EQ(fname_extracted, fname);
+
+    //The objects should be identical.
+    ASSERT_TRUE(fequal == freference);
+    ASSERT_TRUE(flessthan == freference);
+
+    //Remove content from flessthan so it is definitely less than.
+    while (flessthan.m_buf.Nelem())
+    {
+        flessthan.m_buf.DeleteOne(0);
+    }
+
+    //These relationships should hold now.
+    ASSERT_TRUE(flessthan <= freference);
+    ASSERT_TRUE(fequal <= freference);
+    ASSERT_FALSE(freference <= flessthan);
+}
+
+
+//Check that the equality comparison operator seems to function.
+TEST_F(LgFbufUint8Test, LessThanOrEqualityComparisonCheck01)
+{
+    const char* fname = "ut_LgVerbosity.cpp";
+    LgFbufUint8 freference, fequal, flessthan;
+    bool bresult = false;
+    std::string fname_extracted;
+
+    //Read a known existing file into ts0.
+    bresult = freference.Fread(fname);
+    ASSERT_TRUE(bresult);
+
+    //Copy to a second object.
+    fequal = flessthan = freference;
+
+    //Double-check important parameters of the first object.  The second and third objects are assumed identical.
+    ASSERT_EQ(freference.m_state, LgFbufUint8State::Occupied);
+    ASSERT_EQ(freference.m_errs, 0);
+    ASSERT_TRUE(freference.m_buf.m_n_used > 0);
+    ASSERT_TRUE(freference.m_buf.m_n_allocd >= freference.m_buf.m_n_used);
+    fname_extracted = freference.GetFilename();
+    ASSERT_EQ(fname_extracted, fname);
+
+    //The objects should be identical.
+    ASSERT_TRUE(fequal == freference);
+    ASSERT_TRUE(flessthan == freference);
+
+    //Remove content from flessthan so it is definitely less than.
+    while (flessthan.m_buf.Nelem())
+    {
+        flessthan.m_buf.DeleteOne(0);
+    }
+
+    //These relationships should hold now.
+    ASSERT_FALSE(flessthan == freference);
+    ASSERT_TRUE(fequal == freference);
+    ASSERT_FALSE(freference == flessthan);
+    ASSERT_FALSE(flessthan == freference);
+    ASSERT_TRUE(fequal == fequal);
+    ASSERT_TRUE(freference == freference);
+    ASSERT_TRUE(flessthan == flessthan);
+}
+
+
+//Check that the inequality comparison operator seems to function.
+TEST_F(LgFbufUint8Test, LessThanOrInequalityComparisonCheck01)
+{
+    const char* fname = "ut_LgVerbosity.cpp";
+    LgFbufUint8 freference, fequal, flessthan;
+    bool bresult = false;
+    std::string fname_extracted;
+
+    //Read a known existing file into ts0.
+    bresult = freference.Fread(fname);
+    ASSERT_TRUE(bresult);
+
+    //Copy to a second object.
+    fequal = flessthan = freference;
+
+    //Double-check important parameters of the first object.  The second and third objects are assumed identical.
+    ASSERT_EQ(freference.m_state, LgFbufUint8State::Occupied);
+    ASSERT_EQ(freference.m_errs, 0);
+    ASSERT_TRUE(freference.m_buf.m_n_used > 0);
+    ASSERT_TRUE(freference.m_buf.m_n_allocd >= freference.m_buf.m_n_used);
+    fname_extracted = freference.GetFilename();
+    ASSERT_EQ(fname_extracted, fname);
+
+    //The objects should be identical.
+    ASSERT_TRUE(fequal == freference);
+    ASSERT_TRUE(flessthan == freference);
+
+    //Remove content from flessthan so it is definitely less than.
+    while (flessthan.m_buf.Nelem())
+    {
+        flessthan.m_buf.DeleteOne(0);
+    }
+
+    //These relationships should hold now.
+    ASSERT_TRUE(flessthan != freference);
+    ASSERT_FALSE(fequal != freference);
+    ASSERT_TRUE(freference != flessthan);
+    ASSERT_TRUE(flessthan != freference);
+    ASSERT_FALSE(fequal != fequal);
+    ASSERT_FALSE(freference != freference);
+    ASSERT_FALSE(flessthan != flessthan);
+}
+
+
+//Check that the greater than or equal operator seems to function.
+TEST_F(LgFbufUint8Test, GreaterThanOrEqualOperatorCheck01)
+{
+    const char* fname = "ut_LgVerbosity.cpp";
+    LgFbufUint8 freference, fequal, flessthan;
+    bool bresult = false;
+    std::string fname_extracted;
+
+    //Read a known existing file into ts0.
+    bresult = freference.Fread(fname);
+    ASSERT_TRUE(bresult);
+
+    //Copy to a second object.
+    fequal = flessthan = freference;
+
+    //Double-check important parameters of the first object.  The second and third objects are assumed identical.
+    ASSERT_EQ(freference.m_state, LgFbufUint8State::Occupied);
+    ASSERT_EQ(freference.m_errs, 0);
+    ASSERT_TRUE(freference.m_buf.m_n_used > 0);
+    ASSERT_TRUE(freference.m_buf.m_n_allocd >= freference.m_buf.m_n_used);
+    fname_extracted = freference.GetFilename();
+    ASSERT_EQ(fname_extracted, fname);
+
+    //The objects should be identical.
+    ASSERT_TRUE(fequal == freference);
+    ASSERT_TRUE(flessthan == freference);
+
+    //Remove content from flessthan so it is definitely less than.
+    while (flessthan.m_buf.Nelem())
+    {
+        flessthan.m_buf.DeleteOne(0);
+    }
+
+    //These relationships should hold now.
+    ASSERT_TRUE(freference >=flessthan);
+    ASSERT_TRUE(fequal >= freference);
+    ASSERT_TRUE(freference >= flessthan);
+    ASSERT_FALSE(flessthan >= freference);
+}
+
+
+//Check that the greater than operator seems to function.
+TEST_F(LgFbufUint8Test, GreaterThanOperatorCheck01)
+{
+    const char* fname = "ut_LgVerbosity.cpp";
+    LgFbufUint8 freference, fequal, flessthan;
+    bool bresult = false;
+    std::string fname_extracted;
+
+    //Read a known existing file into ts0.
+    bresult = freference.Fread(fname);
+    ASSERT_TRUE(bresult);
+
+    //Copy to a second object.
+    fequal = flessthan = freference;
+
+    //Double-check important parameters of the first object.  The second and third objects are assumed identical.
+    ASSERT_EQ(freference.m_state, LgFbufUint8State::Occupied);
+    ASSERT_EQ(freference.m_errs, 0);
+    ASSERT_TRUE(freference.m_buf.m_n_used > 0);
+    ASSERT_TRUE(freference.m_buf.m_n_allocd >= freference.m_buf.m_n_used);
+    fname_extracted = freference.GetFilename();
+    ASSERT_EQ(fname_extracted, fname);
+
+    //The objects should be identical.
+    ASSERT_TRUE(fequal == freference);
+    ASSERT_TRUE(flessthan == freference);
+
+    //Remove content from flessthan so it is definitely less than.
+    while (flessthan.m_buf.Nelem())
+    {
+        flessthan.m_buf.DeleteOne(0);
+    }
+
+    //These relationships should hold now.
+    ASSERT_TRUE(freference > flessthan);
+    ASSERT_FALSE(fequal > freference);
+    ASSERT_TRUE(freference > flessthan);
+    ASSERT_FALSE(flessthan > freference);
+}
+
+
 
 //Checks the error getting and clearing functions.
 TEST_F(LgFbufUint8Test, ErrGetAndClear)
@@ -264,3 +474,4 @@ TEST_F(LgFbufUint8Test, TextFileRead)
 
     ASSERT_TRUE(fts1 == fts2);
 }
+
