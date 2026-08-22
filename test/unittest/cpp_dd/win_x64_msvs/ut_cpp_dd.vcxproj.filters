@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\cpp_cm\lg_cpp_cm_fio.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_dd\char\lg_cpp_dd_charf.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_dd\char_array\lg_cpp_dd_buf_uint8.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_dd\char_array\lg_cpp_dd_fbuf_uint8.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_dd\memory\lg_cpp_dd_malloc.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_dd\memory\lg_cpp_dd_malloc_alt.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_dd\size_t\lg_cpp_dd_size_t.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_dd\verbosity\lg_verbosity.cpp" />
+    <ClCompile Include="ut_LgBufUint8.cpp" />
+    <ClCompile Include="ut_LgFbufUint8.cpp" />
+    <ClCompile Include="ut_LgVerbosity.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{7cd5b7ce-09dd-49a4-8ac1-a85ec511c517}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
