@@ -1,24 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\src\cpp_cm\lg_cpp_cm_fio.cpp" />
-    <ClCompile Include="..\..\..\..\src\cpp_dd\char\lg_cpp_dd_charf.cpp" />
-    <ClCompile Include="..\..\..\..\src\cpp_dd\char_array\lg_cpp_dd_buf_uint8.cpp" />
-    <ClCompile Include="..\..\..\..\src\cpp_dd\char_array\lg_cpp_dd_fbuf_uint8.cpp" />
-    <ClCompile Include="..\..\..\..\src\cpp_dd\memory\lg_cpp_dd_malloc.cpp" />
-    <ClCompile Include="..\..\..\..\src\cpp_dd\memory\lg_cpp_dd_malloc_alt.cpp" />
-    <ClCompile Include="..\..\..\..\src\cpp_dd\size_t\lg_cpp_dd_size_t.cpp" />
-    <ClCompile Include="..\..\..\..\src\cpp_dd\verbosity\lg_verbosity.cpp" />
-    <ClCompile Include="ut_LgBufUint8.cpp" />
-    <ClCompile Include="ut_LgFbufUint8.cpp" />
-    <ClCompile Include="ut_LgVerbosity.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_cm\lg_cpp_cm_fio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\cpp_dd\char_array\lg_cpp_dd_buf_uint8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\cpp_dd\char\lg_cpp_dd_charf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\cpp_dd\char_array\lg_cpp_dd_fbuf_uint8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\cpp_dd\memory\lg_cpp_dd_malloc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\cpp_dd\memory\lg_cpp_dd_malloc_alt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\cpp_dd\size_t\lg_cpp_dd_size_t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\cpp_dd\verbosity\lg_verbosity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ut_LgBufUint8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ut_LgVerbosity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ut_LgFbufUint8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="NewFilter1">
+    <Filter Include="Header Files">
       <UniqueIdentifier>{7cd5b7ce-09dd-49a4-8ac1-a85ec511c517}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8ba11d0e-1309-4c67-a8e4-2e2de5fdfe6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{c75331d9-6620-4015-a42d-1923e66259d0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
