@@ -59,6 +59,25 @@
 #endif
 
 
+#if 0
+
+/*!
+ * \brief                       D
+ *
+ * \reentrancyandthreadsafety   Not evaluated.
+ *
+ * \errorsandexceptions         No errors or exceptions are possible.
+ */
+LgSha1::LgSha1() noexcept : m_bufferSize{ 0 },
+m_bitCount{ 0 },
+m_finalized{ false },
+m_state{ 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 },
+//Initial state as defined in FIPS 180-1.
+m_buffer{ 0 }
+{}
+#endif
+
+
 /*!
  * \brief                       Default constructor.  Constructs a new object.
  *
@@ -66,17 +85,70 @@
  *
  * \errorsandexceptions         No errors or exceptions are possible.
  */
-LgSha1::LgSha1() noexcept : m_state{ 0 }, m_bitCount{ 0 }, m_buffer{ 0 }, m_bufferSize{ 0 }, m_finalized{ false }
+LgSha1::LgSha1() noexcept : m_bufferSize{ 0 },
+                            m_bitCount{ 0 },
+                            m_finalized{ false },
+                            m_state{ 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 },
+                              //Initial state as defined in FIPS 180-1.
+                            m_buffer{ 0 }
 {}
 
+
+/*!
+ * \brief                       Destructor.  Destroys an object.
+ *
+ * \reentrancyandthreadsafety   Not evaluated.
+ *
+ * \errorsandexceptions         No errors or exceptions are possible.
+ */
 LgSha1::~LgSha1() noexcept
 {
+   m_bufferSize = 0;
+   m_bitCount = 0;
+   m_finalized = false;
+   memset(m_state, 0, sizeof(m_state));
+   memset(m_buffer, 0, sizeof(m_buffer));
 }
 
+
+/*!
+ * \brief Adds in in_nbytes at in_bptr to the SHA1 calculation.
+ *
+ * \param[in]     in_bptr        Pointer to the input data.  If this pointer is null, the function
+ *                               does nothing.
+ * \param[in]     in_nbytes      The number of bytes to add.  If in_nbytes is 0, the function the
+ *                               function does nothing and will not dereference in_bptr.
+ *
+ * \reentrancyandthreadsafety    Not evaluated.
+ *
+ * \errorsandexceptions          Out of memory is a possible exception.
+ */
+void LgSha1::Add(uint8_t *in_bptr, size_t in_nbytes) noexcept
+{
+    if ((in_bptr != nullptr) && (in_nbytes != 0))
+    {
+        while (in_nbytes)
+        {
+            while ((in_nbytes > 0) && (m_bufferSize < 64))
+            {
+                m_buffer[m_bufferSize++] = *in_bptr++;
+                in_nbytes--;
+                m_bitCount += 8;
+            }
+
+            if (m_bufferSize >= 64)
+            {
+                //ProcessBlock(m_buffer);
+                m_bufferSize = 0;
+            }
+        }
+    }
+}
+
+
+
+
 #if 0
-
-
-
 /*!
  * \brief                       Default constructor.  Constructs a new object.
  * 

@@ -48,14 +48,22 @@ class LgSha1
    #else
    public:
    #endif
-   uint32_t m_state[5];
-   uint64_t m_bitCount;
-   uint8_t  m_buffer[64];
    size_t   m_bufferSize;
+      //!< The number of bytes presently in the buffer.  These are being held in order to reach
+      //!< finalization or enough bytes added to fill the buffer.
+   uint64_t m_bitCount;
+      //!< The number of bits in the message whose SHA1 is being calculated, so far.
    bool     m_finalized;
-   public:
+      //!< false if calculation has not been finalized, true if it has.  An SHA1 that has been
+      //!< finalized cannot have more data added or be finalized again.
+   uint32_t m_state[5];
+      //!< The state as defined in FIPS 180-1.
+   uint8_t  m_buffer[64];
+      //!< The buffer to hold pending bytes to be hashed.
+public:
       LgSha1() noexcept;
       ~LgSha1() noexcept;
+      void Add(uint8_t *in_bptr, size_t in_nbytes) noexcept;
 };
 
 #if 0
