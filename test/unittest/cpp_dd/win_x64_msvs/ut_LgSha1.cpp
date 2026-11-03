@@ -136,7 +136,10 @@ TEST_F(LgSha1Test, EmptyStringHashLowercase)
     ASSERT_EQ(strcmp(expected_hash, hash_output), 0);
 }
 
-//Double-checks the hash of a strings out to 130 bytes.
+//Double-checks the hash of a strings out to 130 bytes.  Also double-checks the following behavior:
+//  a) The AddOne method.
+//  b) The IsFinalized method.
+//  c) The Clear method.
 TEST_F(LgSha1Test, ZeroTo130ByteStringHashLowercase)
 {
    const struct {
@@ -446,7 +449,7 @@ TEST_F(LgSha1Test, ZeroTo130ByteStringHashLowercase)
        },
        {
           //  60
-          "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTuvwx",
+          "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWX",
           "29104e033f181e01628a5c6492af3a72601fbe0a"
        },
        {
@@ -802,9 +805,10 @@ TEST_F(LgSha1Test, ZeroTo130ByteStringHashLowercase)
     };
 
    size_t num_test_cases = sizeof(test_cases) / sizeof(test_cases[0]);
-   size_t i;
+   size_t i, j;
    char hash_output[41] = { 0 };
 
+   //Double check the test vectors.
    for (i = 0; i < num_test_cases; i++)
    {
       LgSha1 ts;
@@ -819,7 +823,70 @@ TEST_F(LgSha1Test, ZeroTo130ByteStringHashLowercase)
       ASSERT_TRUE(ts.m_finalized);
       ts.ExtractToCstring(hash_output, false);
 
-      printf("Iteration %zu, Expected hash: %s, Actual hash: %s\n", i, expected_hash, hash_output);
+      //printf("Iteration %zu, Expected hash: %s, Actual hash: %s\n", i, expected_hash, hash_output);
+
+      ASSERT_EQ(strcmp(expected_hash, hash_output), 0);
+   }
+
+   //Double check the Clear method.
+   for (i = 0; i < num_test_cases; i++)
+   {
+      LgSha1 ts;
+
+      const char* hash_input = test_cases[i].input;
+      const char* expected_hash = test_cases[i].expected_hash;
+
+      ASSERT_EQ(strlen(hash_input), i);
+      ASSERT_EQ(strlen(expected_hash), 40);
+      ts.Add((const uint8_t*)hash_input, strlen(hash_input));
+      ts.Finalize();
+      ASSERT_TRUE(ts.m_finalized);
+      ts.ExtractToCstring(hash_output, false);
+
+      //printf("Iteration %zu, Expected hash: %s, Actual hash: %s\n", i, expected_hash, hash_output);
+
+      ASSERT_EQ(strcmp(expected_hash, hash_output), 0);
+
+      ts.Clear();
+      ts.Add((const uint8_t*)hash_input, strlen(hash_input));
+      ts.Finalize();
+      ASSERT_TRUE(ts.m_finalized);
+      ts.ExtractToCstring(hash_output, false);
+      ASSERT_EQ(strcmp(expected_hash, hash_output), 0);
+
+      ts.Clear();
+      ts.Add((const uint8_t*)hash_input, strlen(hash_input));
+      ASSERT_FALSE(ts.m_finalized);
+
+      ts.Clear();
+      ASSERT_FALSE(ts.m_finalized);
+      ts.Add((const uint8_t*)hash_input, strlen(hash_input));
+      ts.Finalize();
+      ASSERT_TRUE(ts.m_finalized);
+      ts.ExtractToCstring(hash_output, false);
+      ASSERT_EQ(strcmp(expected_hash, hash_output), 0);
+   }
+
+   //Double check the AddOne method.
+   for (i = 0; i < num_test_cases; i++)
+   {
+      LgSha1 ts;
+
+      const char* hash_input = test_cases[i].input;
+      const char* expected_hash = test_cases[i].expected_hash;
+
+      ASSERT_EQ(strlen(hash_input), i);
+      ASSERT_EQ(strlen(expected_hash), 40);
+
+      for (j = 0; j < strlen(hash_input); j++)
+      {
+         ts.AddOne((uint8_t)hash_input[j]);
+      }
+      ts.Finalize();
+      ASSERT_TRUE(ts.m_finalized);
+      ts.ExtractToCstring(hash_output, false);
+
+      //printf("Iteration %zu, Expected hash: %s, Actual hash: %s\n", i, expected_hash, hash_output);
 
       ASSERT_EQ(strcmp(expected_hash, hash_output), 0);
    }
