@@ -59,23 +59,87 @@
 #endif
 
 
-#if 0
+
 
 /*!
- * \brief                       D
+ * \brief                       Performs the SHA1 rounds as specified by FIPS 180-1.  The algorithm
+ *                              variant requiring more space is used: consumption on the stack should
+ *                              be approximately 320 bytes.
  *
  * \reentrancyandthreadsafety   Not evaluated.
  *
  * \errorsandexceptions         No errors or exceptions are possible.
  */
-LgSha1::LgSha1() noexcept : m_bufferSize{ 0 },
-m_bitCount{ 0 },
-m_finalized{ false },
-m_state{ 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 },
-//Initial state as defined in FIPS 180-1.
-m_buffer{ 0 }
-{}
-#endif
+static void Sha1ProcessBlock(uint32_t* in_state, uint8_t* in_buffer)
+{
+   size_t i;
+   uint32_t w[80];
+   uint32_t a, b, c, d, e, temp;
+
+   for (i = 0; i < 64; i++)
+   {
+       printf("%02X ", in_buffer[i]);
+   }
+   printf("\n");
+
+
+   //Load words 0 through 15 from the buffer.
+   for (i = 0; i < 16; i++)
+   {
+      w[i] = (((uint32_t)in_buffer[i * 4    ]) << 24) |
+             (((uint32_t)in_buffer[i * 4 + 1]) << 16) |
+             (((uint32_t)in_buffer[i * 4 + 2]) <<  8) |
+             (((uint32_t)in_buffer[i * 4 + 3])      );
+   }
+
+   //Calculate words 16 through 79.
+   for (i = 16; i < 80; i++)
+   {
+      temp = w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16];
+      w[i] = (temp << 1) | (temp >> 31);
+   }
+
+   //Initial conditions pre-loop.
+   a = in_state[0];
+   b = in_state[1];
+   c = in_state[2];
+   d = in_state[3];
+   e = in_state[4];
+
+   //Main loop.
+   for (i = 0; i < 80; i++)
+   {
+      if (i < 20)
+      {
+         temp = ((a << 5) | (a >> 27)) + ((b & c) | (~b & d)) + e + w[i] + 0x5A827999;
+      }
+      else if (i < 40)
+      {
+         temp = ((a << 5) | (a >> 27)) + (b ^ c ^ d) + e + w[i] + 0x6ED9EBA1;
+      }
+      else if (i < 60)
+      {
+         temp = ((a << 5) | (a >> 27)) + ((b & c) | (b & d) | (c & d)) + e + w[i] + 0x8F1BBCDC;
+      }
+      else
+      {
+         temp = ((a << 5) | (a >> 27)) + (b ^ c ^ d) + e + w[i] + 0xCA62C1D6;
+      }
+
+      e = d;
+      d = c;
+      c = (b << 30) | (b >> 2);
+      b = a;
+      a = temp;
+   }
+
+   //Add the results back into the state.
+   in_state[0] += a;
+   in_state[1] += b;
+   in_state[2] += c;
+   in_state[3] += d;
+   in_state[4] += e;
+}
 
 
 /*!
@@ -125,7 +189,7 @@ LgSha1::~LgSha1() noexcept
  */
 void LgSha1::Add(uint8_t *in_bptr, size_t in_nbytes) noexcept
 {
-    if ((in_bptr != nullptr) && (in_nbytes != 0))
+    if ((!m_finalized) && (in_bptr != nullptr) && (in_nbytes != 0))
     {
         while (in_nbytes)
         {
@@ -138,11 +202,59 @@ void LgSha1::Add(uint8_t *in_bptr, size_t in_nbytes) noexcept
 
             if (m_bufferSize >= 64)
             {
-                //ProcessBlock(m_buffer);
+                Sha1ProcessBlock(m_state, m_buffer);
                 m_bufferSize = 0;
             }
         }
     }
+}
+
+
+/*!
+ * \brief Finalizes the SHA1 calculation. After this function is called, no more data can be added
+ *        to the calculation.
+ *
+ * \reentrancyandthreadsafety    Not evaluated.
+ *
+ * \errorsandexceptions          Out of memory is a possible exception.
+ */
+void LgSha1::Finalize(void) noexcept
+{
+   uint8_t padding_0 = 0x00;
+   uint8_t padding_1 = 0x80;
+   uint8_t size_in_bits[8];
+   uint64_t bit_count_copy = m_bitCount;
+
+   if (!m_finalized)
+   {
+      //Because this class accepts bytes (rather than bits), the '1' padding can be achieved by
+      //adding 0x80 to the buffer.  The rest of the padding is 0x00, which is already in the buffer.
+      (*this).Add(&padding_1, 1);
+
+      //Continue to add 0's until there are exactly 56 bytes in the buffer.  This is because the
+      //last 8 bytes will be used to store the bit count.
+      while (m_bufferSize != 56)
+      {
+         (*this).Add(&padding_0, 1);
+      }
+
+      m_bitCount = bit_count_copy;  //Restore the bit count, because the Add() calls above changed it.
+
+      size_in_bits[0] = (uint8_t)((m_bitCount >> 56) & 0xFF);
+      size_in_bits[1] = (uint8_t)((m_bitCount >> 48) & 0xFF);
+      size_in_bits[2] = (uint8_t)((m_bitCount >> 40) & 0xFF);
+      size_in_bits[3] = (uint8_t)((m_bitCount >> 32) & 0xFF);
+      size_in_bits[4] = (uint8_t)((m_bitCount >> 24) & 0xFF);
+      size_in_bits[5] = (uint8_t)((m_bitCount >> 16) & 0xFF);
+      size_in_bits[6] = (uint8_t)((m_bitCount >> 8) & 0xFF);
+      size_in_bits[7] = (uint8_t)((m_bitCount >> 0) & 0xFF);
+      (*this).Add(size_in_bits, 8);
+
+      printf("Hash: %08X %08X %08X %08X %08X\n", m_state[0], m_state[1], m_state[2], m_state[3], m_state[4]);
+
+      //Perform finalization logic here
+      m_finalized = true;
+   }
 }
 
 

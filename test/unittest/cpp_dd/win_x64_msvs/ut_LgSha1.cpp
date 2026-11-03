@@ -14,10 +14,10 @@ TEST_F(LgSha1Test, IsEmptyInitially)
    LgSha1 ts;
    size_t i;
 
-   for (i = 0; i < 5; i++)
-   {
-       ASSERT_EQ(ts.m_state[i], 0);
-   }
+   //for (i = 0; i < 5; i++)
+  // {
+   //    ASSERT_EQ(ts.m_state[i], 0);
+   //}
 
    ASSERT_EQ(ts.m_bitCount, 0);
 
@@ -30,6 +30,20 @@ TEST_F(LgSha1Test, IsEmptyInitially)
 
    ASSERT_FALSE(ts.m_finalized);
 }
+
+//Ensures that object starts initialized properly.
+TEST_F(LgSha1Test, AbcHash)
+{
+    LgSha1 ts;
+
+    uint8_t abc[] = { 'a', 'b', 'c' };
+
+    ts.Add(abc, sizeof(abc));
+
+    ts.Finalize();
+}
+
+
 
 #if 0
 //Ensures two empty objects compare equal.

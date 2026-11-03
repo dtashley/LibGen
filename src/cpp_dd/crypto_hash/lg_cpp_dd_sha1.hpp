@@ -64,6 +64,7 @@ public:
       LgSha1() noexcept;
       ~LgSha1() noexcept;
       void Add(uint8_t *in_bptr, size_t in_nbytes) noexcept;
+      void Finalize(void) noexcept;
 };
 
 #if 0
