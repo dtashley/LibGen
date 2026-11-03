@@ -63,7 +63,8 @@ class LgSha1
 public:
       LgSha1() noexcept;
       ~LgSha1() noexcept;
-      void Add(uint8_t *in_bptr, size_t in_nbytes) noexcept;
+      void Add(uint8_t const *in_bptr, size_t in_nbytes) noexcept;
+      void AddOne(uint8_t in_b) noexcept;
       void Finalize(void) noexcept;
 };
 

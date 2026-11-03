@@ -47,23 +47,11 @@
 #include "lg_cpp_dd_malloc_alt.hpp"
 #include "lg_cpp_dd_size_t.hpp"
 
-
-//In order for this class to work correctly, there must be 8 bits per character.
-//This is the case with most general machines, but there are exceptions.  If a
-//platform has wider characters than 8 bits, I'm not sure how file reads and
-//so on would work.
-#if !defined(CHAR_BIT)
-   #error "CHAR_BIT not defined"
-#elif (CHAR_BIT != 8)
-   #error "CHAR_BIT != 8"
-#endif
-
-
-
-
 /*!
- * \brief                       Performs the SHA1 rounds as specified by FIPS 180-1.  The algorithm
- *                              variant requiring more space is used: consumption on the stack should
+ * \brief                       Private function that performs the SHA1 rounds 
+ *                              as specified by FIPS 180-1.  The FIPS 180-1
+ *                              algorithm variant requiring more space is used:
+ *                              consumption on the stack should
  *                              be approximately 320 bytes.
  *
  * \reentrancyandthreadsafety   Not evaluated.
@@ -76,14 +64,13 @@ static void Sha1ProcessBlock(uint32_t* in_state, uint8_t* in_buffer)
    uint32_t w[80];
    uint32_t a, b, c, d, e, temp;
 
-   for (i = 0; i < 64; i++)
-   {
-       printf("%02X ", in_buffer[i]);
-   }
-   printf("\n");
+   //for (i = 0; i < 64; i++)
+   //{
+   //    printf("%02X ", in_buffer[i]);
+   //}
+   //printf("\n");
 
-
-   //Load words 0 through 15 from the buffer.
+   //Load words 0 through 15 from the buffer.  This comes directly from FIPS 180-1.
    for (i = 0; i < 16; i++)
    {
       w[i] = (((uint32_t)in_buffer[i * 4    ]) << 24) |
@@ -92,7 +79,7 @@ static void Sha1ProcessBlock(uint32_t* in_state, uint8_t* in_buffer)
              (((uint32_t)in_buffer[i * 4 + 3])      );
    }
 
-   //Calculate words 16 through 79.
+   //Calculate words 16 through 79.  This comes directly from FIPS 180-1
    for (i = 16; i < 80; i++)
    {
       temp = w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16];
@@ -155,7 +142,8 @@ LgSha1::LgSha1() noexcept : m_bufferSize{ 0 },
                             m_state{ 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 },
                               //Initial state as defined in FIPS 180-1.
                             m_buffer{ 0 }
-{}
+{
+}
 
 
 /*!
@@ -187,26 +175,41 @@ LgSha1::~LgSha1() noexcept
  *
  * \errorsandexceptions          Out of memory is a possible exception.
  */
-void LgSha1::Add(uint8_t *in_bptr, size_t in_nbytes) noexcept
+void LgSha1::Add(uint8_t const *in_bptr, size_t in_nbytes) noexcept
 {
-    if ((!m_finalized) && (in_bptr != nullptr) && (in_nbytes != 0))
-    {
-        while (in_nbytes)
-        {
-            while ((in_nbytes > 0) && (m_bufferSize < 64))
-            {
-                m_buffer[m_bufferSize++] = *in_bptr++;
-                in_nbytes--;
-                m_bitCount += 8;
-            }
+   if ((!m_finalized) && (in_bptr != nullptr) && (in_nbytes != 0))
+   {
+      while (in_nbytes)
+      {
+         while ((in_nbytes > 0) && (m_bufferSize < 64))
+         {
+            m_buffer[m_bufferSize++] = *in_bptr++;
+            in_nbytes--;
+            m_bitCount += 8;
+         }
 
-            if (m_bufferSize >= 64)
-            {
-                Sha1ProcessBlock(m_state, m_buffer);
-                m_bufferSize = 0;
-            }
-        }
-    }
+         if (m_bufferSize >= 64)
+         {
+            Sha1ProcessBlock(m_state, m_buffer);
+            m_bufferSize = 0;
+         }
+      }
+   }
+}
+
+
+/*!
+ * \brief Adds one byte to the SHA1 calculation.
+ *
+ * \param[in]     in_b           Byte to add.
+ *
+ * \reentrancyandthreadsafety    Not evaluated.
+ *
+ * \errorsandexceptions          Out of memory is a possible exception.
+ */
+void LgSha1::AddOne(uint8_t in_b) noexcept
+{
+   (*this).Add(&in_b, 1);
 }
 
 
