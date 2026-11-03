@@ -181,7 +181,7 @@ void LgSha1::Add(uint8_t const *in_bptr, size_t in_nbytes) noexcept
    {
       while (in_nbytes)
       {
-         while ((in_nbytes > 0) && (m_bufferSize < 64))
+         while ((in_nbytes > 0) && (m_bufferSize < 64)) 
          {
             m_buffer[m_bufferSize++] = *in_bptr++;
             in_nbytes--;
