@@ -140,6 +140,8 @@ TEST_F(LgSha1Test, EmptyStringHashLowercase)
 //  a) The AddOne method.
 //  b) The IsFinalized method.
 //  c) The Clear method.
+//  d) Overruns SHA1 objects.
+//  e) Overruns of arrays used to extract the SHA1 hash.
 TEST_F(LgSha1Test, ZeroTo130ByteStringHashLowercase)
 {
    const struct {
@@ -889,5 +891,43 @@ TEST_F(LgSha1Test, ZeroTo130ByteStringHashLowercase)
       //printf("Iteration %zu, Expected hash: %s, Actual hash: %s\n", i, expected_hash, hash_output);
 
       ASSERT_EQ(strcmp(expected_hash, hash_output), 0);
+   }
+
+   //Check for overruns of the SHA1 objects.
+   {
+      LgSha1 ts[3]; //Each element should be initialized by constructor.
+
+      for (i = 0; i < num_test_cases; i++)
+      {
+         const char* hash_input = test_cases[i].input;
+         const char* expected_hash = test_cases[i].expected_hash;
+
+         ts[1].Add((const uint8_t*)hash_input, strlen(hash_input));
+      }
+
+      ts[1].Finalize();
+
+      ASSERT_EQ(ts[0].m_bufferSize, 0);
+      ASSERT_EQ(ts[2].m_bufferSize, 0);
+      ASSERT_EQ(ts[0].m_bitCount, 0);
+      ASSERT_EQ(ts[2].m_bitCount, 0);
+      ASSERT_FALSE(ts[0].m_finalized);
+      ASSERT_FALSE(ts[2].m_finalized);
+      ASSERT_EQ(ts[0].m_state[0], 0x67452301);
+      ASSERT_EQ(ts[2].m_state[0], 0x67452301);
+      ASSERT_EQ(ts[0].m_state[1], 0xefcdab89);
+      ASSERT_EQ(ts[2].m_state[1], 0xefcdab89);
+      ASSERT_EQ(ts[0].m_state[2], 0x98badcfe);
+      ASSERT_EQ(ts[2].m_state[2], 0x98badcfe);
+      ASSERT_EQ(ts[0].m_state[3], 0x10325476);
+      ASSERT_EQ(ts[2].m_state[3], 0x10325476);
+      ASSERT_EQ(ts[0].m_state[4], 0xc3d2e1f0);
+      ASSERT_EQ(ts[2].m_state[4], 0xc3d2e1f0);
+
+      for (i = 0; i < 64; i++)
+      {
+         ASSERT_EQ(ts[0].m_buffer[i], 0);
+         ASSERT_EQ(ts[2].m_buffer[i], 0);
+      }
    }
 }

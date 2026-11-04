@@ -33,19 +33,7 @@
 //--------------------------------------------------------------------------------------------------
 #define MODULE_LG_CPP_DD_SHA1
 
-#include <assert.h>
-#include <fstream>
-#include <istream>
-#include <iostream>
-#include <iomanip>
-#include <string.h>
-
 #include "lg_cpp_dd_sha1.hpp"
-
-#include "lg_cpp_cm_fio.hpp"
-#include "lg_cpp_dd_charf.hpp"
-#include "lg_cpp_dd_malloc_alt.hpp"
-#include "lg_cpp_dd_size_t.hpp"
 
 /*!
  * \brief                       Private function that performs the SHA1 rounds 
@@ -172,8 +160,6 @@ LgSha1::~LgSha1() noexcept
  *                               function does nothing and will not dereference in_bptr.
  *
  * \reentrancyandthreadsafety    Not evaluated.
- *
- * \errorsandexceptions          Out of memory is a possible exception.
  */
 void LgSha1::Add(uint8_t const *in_bptr, size_t in_nbytes) noexcept
 {
@@ -204,8 +190,6 @@ void LgSha1::Add(uint8_t const *in_bptr, size_t in_nbytes) noexcept
  * \param[in]     in_b           Byte to add.
  *
  * \reentrancyandthreadsafety    Not evaluated.
- *
- * \errorsandexceptions          Out of memory is a possible exception.
  */
 void LgSha1::AddOne(uint8_t in_b) noexcept
 {
@@ -218,8 +202,6 @@ void LgSha1::AddOne(uint8_t in_b) noexcept
  *        to the calculation.
  *
  * \reentrancyandthreadsafety    Not evaluated.
- *
- * \errorsandexceptions          Out of memory is a possible exception.
  */
 void LgSha1::Finalize(void) noexcept
 {
@@ -277,26 +259,32 @@ void LgSha1::Finalize(void) noexcept
  */
 bool LgSha1::IsFinalized(void) const noexcept
 {
-    return m_finalized;
+   return m_finalized;
 }
 
 
 /*!
- * \brief Clears an object back to a pristine state.
+ * \brief Clears an object back to a pristine state.  Data may then
+ *        be added to the object and a new SHA1 calculation can be
+ *        performed.
  *
  * \reentrancyandthreadsafety    Not evaluated.
  */
 void LgSha1::Clear(void) noexcept
 {
-    m_bufferSize = 0;
-    m_bitCount   = 0;
-    m_finalized  = false;
-    m_state[0]   = 0x67452301;
-    m_state[1]   = 0xefcdab89;
-    m_state[2]   = 0x98badcfe;
-    m_state[3]   = 0x10325476;
-    m_state[4]   = 0xc3d2e1f0;
-    memset(m_buffer, 0, sizeof(m_buffer));
+   //TODO: A constructor can't be called directly by another member function.  It is
+   //      possible to use a shared private function, or to create a new object
+   //      and assign.  Will leave this approach in place until have had a
+   //      chance to research the alternatives.
+   m_bufferSize = 0;
+   m_bitCount   = 0;
+   m_finalized  = false;
+   m_state[0]   = 0x67452301;
+   m_state[1]   = 0xefcdab89;
+   m_state[2]   = 0x98badcfe;
+   m_state[3]   = 0x10325476;
+   m_state[4]   = 0xc3d2e1f0;
+   memset(m_buffer, 0, sizeof(m_buffer));
 }
 
 
@@ -320,7 +308,7 @@ void LgSha1::ExtractToCstring(char* in_pstr, bool in_uc) const noexcept
    {
       if (m_finalized)
       {
-         for (size_t i = 0; i < 5; ++i)
+         for (size_t i = 0; i < 5; i++)
          {
             if (in_uc)
             {
@@ -347,12 +335,10 @@ void LgSha1::ExtractToCstring(char* in_pstr, bool in_uc) const noexcept
  *        [0] through [19] will be written to the array.
  *
  * \param[in]     in_pbarray     Pointer from caller providing area with space for at least
- *                               20 bytes (4 bytes per SHA1 hash value).  If this pointer is null,
- *                               the function does nothing.
+ *                               20 bytes (4 bytes per SHA1 hash word value).  If this pointer
+ *                               is null, the function does nothing.
  *
  * \reentrancyandthreadsafety    Not evaluated.
- *
- * \errorsandexceptions          Out of memory is a possible exception.
  */
 void LgSha1::ExtractToByteArray(uint8_t* in_pbarray) const noexcept
 {
@@ -360,7 +346,7 @@ void LgSha1::ExtractToByteArray(uint8_t* in_pbarray) const noexcept
    {
       if (m_finalized)
       {
-         for (size_t i = 0; i < 5; ++i)
+         for (size_t i = 0; i < 5; i++)
          {
             in_pbarray[i * 4    ] = (uint8_t)((m_state[i] >> 24) & 0xFF);
             in_pbarray[i * 4 + 1] = (uint8_t)((m_state[i] >> 16) & 0xFF);
@@ -383,12 +369,10 @@ void LgSha1::ExtractToByteArray(uint8_t* in_pbarray) const noexcept
  *        integers [0] through [4] will be written to the array.
  *
  * \param[in]   in_pu32array     Pointer from caller providing area with space for at least
- *                               5 32-bit (4 bytes per SHA1 hash value).  If this pointer is null,
- *                               the function does nothing.
+ *                               5 32-bit (4 bytes per SHA1 hash word value).  If this pointer
+ *                               is nullptr, the function does nothing.
  *
  * \reentrancyandthreadsafety    Not evaluated.
- *
- * \errorsandexceptions          Out of memory is a possible exception.
  */
 void LgSha1::ExtractToUint32Array(uint32_t* in_pu32array) const noexcept
 {
@@ -396,7 +380,7 @@ void LgSha1::ExtractToUint32Array(uint32_t* in_pu32array) const noexcept
    {
       if (m_finalized)
       {
-         for (size_t i = 0; i < 5; ++i)
+         for (size_t i = 0; i < 5; i++)
          {
             in_pu32array[i] = m_state[i];
          }
