@@ -896,6 +896,18 @@ TEST_F(LgSha1Test, ZeroTo130ByteStringHashLowercase)
    //Check for overruns of the SHA1 objects.
    {
       LgSha1 ts[3]; //Each element should be initialized by constructor.
+      char hash_output[43] = { 0 };
+      uint8_t hash_output_bytes[22] = { 0 };
+      uint32_t hash_output_words[7] = { 0 };
+
+      //Load up the arrays with markers at both ends so it
+      //can be checked if there were overruns.
+      hash_output[0] = (char)0xA5;
+      hash_output[42] = (char)0xA5;
+      hash_output_bytes[0] = 0xA5;
+      hash_output_bytes[21] = 0xA5;
+      hash_output_words[0] = 0xA5A5A5A5;
+      hash_output_words[6] = 0xA5A5A5A5;
 
       for (i = 0; i < num_test_cases; i++)
       {
@@ -907,6 +919,21 @@ TEST_F(LgSha1Test, ZeroTo130ByteStringHashLowercase)
 
       ts[1].Finalize();
 
+      //Extract using pointers one past the start, so we can look
+      //for writes that should not have occurred.
+      ts[1].ExtractToCstring(hash_output+1);
+      ts[1].ExtractToByteArray(hash_output_bytes + 1);
+      ts[1].ExtractToUint32Array(hash_output_words + 1);
+
+      //Check for overruns in the buffers used for copying the hash out.
+      ASSERT_EQ(hash_output[0], (char)0xA5);
+      ASSERT_EQ(hash_output[42], (char)0xA5);
+      ASSERT_EQ(hash_output_bytes[0], 0xA5);
+      ASSERT_EQ(hash_output_bytes[21], 0xA5);
+      ASSERT_EQ(hash_output_words[0], 0xA5A5A5A5);
+      ASSERT_EQ(hash_output_words[6], 0xA5A5A5A5);
+
+      //Check for object overruns.
       ASSERT_EQ(ts[0].m_bufferSize, 0);
       ASSERT_EQ(ts[2].m_bufferSize, 0);
       ASSERT_EQ(ts[0].m_bitCount, 0);
