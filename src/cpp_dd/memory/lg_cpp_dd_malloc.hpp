@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------
-//Header file for C++ data-driven functions, wrapper around malloc() family of functions, with
-//the ability to throw an exception if out of memory.
+//C++ data-driven functions, wrapper around malloc() family of functions, with the ability to
+//throw an exception if out of memory.
 //--------------------------------------------------------------------------------------------------
 //This file is part of LibGen, https://github.com/dtashley/LibGen, and is provided
 //under The Unlicense, reproduced below.
@@ -14,9 +14,9 @@
 //
 //In jurisdictions that recognize copyright laws, the author or authors
 //of this software dedicate any and all copyright interest in the
-//software to the public domain.We make this dedication for the benefit
+//software to the public domain. We make this dedication for the benefit
 //of the public at large and to the detriment of our heirs and
-//successors.We intend this dedication to be an overt act of
+//successors. We intend this dedication to be an overt act of
 //relinquishment in perpetuity of all present and future rights to this
 //software under copyright law.
 //
@@ -41,4 +41,4 @@
    extern void  LgCppCm_MallocFree(void* in_memblock);
 #endif
 
-//End of lg_cpp_dd_malloc.h.
+//End of lg_cpp_dd_malloc_alt.hpp.
