@@ -38,7 +38,7 @@
 
 #include "lg_cpp_dd_buf_uint8.hpp"
 
-
+extern bool LgPrdpBu8ParseSpcTbNoEols(const LgBufUint8& in_buf, size_t in_start, size_t& out_end, bool * out_found = nullptr);
 
 #endif
 

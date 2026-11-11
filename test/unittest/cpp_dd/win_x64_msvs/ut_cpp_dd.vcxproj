@@ -42,7 +42,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\..\src\cpp_dd\crypto_hash;..\..\..\..\src\cpp_dd\verbosity;..\..\..\..\src\cpp_dd\size_t;..\..\..\..\src\cpp_dd\memory;..\..\..\..\src\cpp_dd\char;..\..\..\..\src\cpp_cm;..\..\..\..\src\cpp_dd\char_array;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\src\cpp_dd\parse;..\..\..\..\src\cpp_dd\crypto_hash;..\..\..\..\src\cpp_dd\verbosity;..\..\..\..\src\cpp_dd\size_t;..\..\..\..\src\cpp_dd\memory;..\..\..\..\src\cpp_dd\char;..\..\..\..\src\cpp_cm;..\..\..\..\src\cpp_dd\char_array;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -59,7 +59,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\..\src\cpp_dd\crypto_hash;..\..\..\..\src\cpp_dd\verbosity;..\..\..\..\src\cpp_dd\size_t;..\..\..\..\src\cpp_dd\memory;..\..\..\..\src\cpp_dd\char;..\..\..\..\src\cpp_cm;..\..\..\..\src\cpp_dd\char_array;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\src\cpp_dd\parse;..\..\..\..\src\cpp_dd\crypto_hash;..\..\..\..\src\cpp_dd\verbosity;..\..\..\..\src\cpp_dd\size_t;..\..\..\..\src\cpp_dd\memory;..\..\..\..\src\cpp_dd\char;..\..\..\..\src\cpp_cm;..\..\..\..\src\cpp_dd\char_array;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -74,7 +74,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\..\src\cpp_dd\crypto_hash;..\..\..\..\src\cpp_dd\verbosity;..\..\..\..\src\cpp_dd\size_t;..\..\..\..\src\cpp_dd\memory;..\..\..\..\src\cpp_dd\char;..\..\..\..\src\cpp_cm;..\..\..\..\src\cpp_dd\char_array;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\src\cpp_dd\parse;..\..\..\..\src\cpp_dd\crypto_hash;..\..\..\..\src\cpp_dd\verbosity;..\..\..\..\src\cpp_dd\size_t;..\..\..\..\src\cpp_dd\memory;..\..\..\..\src\cpp_dd\char;..\..\..\..\src\cpp_cm;..\..\..\..\src\cpp_dd\char_array;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -92,7 +92,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\..\src\cpp_dd\crypto_hash;..\..\..\..\src\cpp_dd\verbosity;..\..\..\..\src\cpp_dd\size_t;..\..\..\..\src\cpp_dd\memory;..\..\..\..\src\cpp_dd\char;..\..\..\..\src\cpp_cm;..\..\..\..\src\cpp_dd\char_array;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\src\cpp_dd\parse;..\..\..\..\src\cpp_dd\crypto_hash;..\..\..\..\src\cpp_dd\verbosity;..\..\..\..\src\cpp_dd\size_t;..\..\..\..\src\cpp_dd\memory;..\..\..\..\src\cpp_dd\char;..\..\..\..\src\cpp_cm;..\..\..\..\src\cpp_dd\char_array;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -108,11 +108,13 @@
     <ClCompile Include="..\..\..\..\src\cpp_dd\crypto_hash\lg_cpp_dd_sha1.cpp" />
     <ClCompile Include="..\..\..\..\src\cpp_dd\memory\lg_cpp_dd_malloc.cpp" />
     <ClCompile Include="..\..\..\..\src\cpp_dd\memory\lg_cpp_dd_malloc_alt.cpp" />
+    <ClCompile Include="..\..\..\..\src\cpp_dd\parse\lg_parse_rdp_buf_uint8.cpp" />
     <ClCompile Include="..\..\..\..\src\cpp_dd\size_t\lg_cpp_dd_size_t.cpp" />
     <ClCompile Include="..\..\..\..\src\cpp_dd\verbosity\lg_verbosity.cpp" />
     <ClCompile Include="ut_LgBufUint8.cpp" />
     <ClCompile Include="ut_LgSha1.cpp" />
     <ClCompile Include="ut_LgVerbosity.cpp" />
+    <ClCompile Include="ut_ParseRdpBufUint8.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

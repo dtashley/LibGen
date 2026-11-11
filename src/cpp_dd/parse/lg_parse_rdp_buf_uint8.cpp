@@ -50,24 +50,66 @@
 
 
 /*!
- * \brief Adjusts the memory allocation associated with a buffer upwards to be
- *        at least the specified number of bytes.  Requests that would result
- *        in a downward allocation will be ignored.
+ * \brief Attempts to parse conventional whitespace (space and tab characters only),
+ *        starting at a given point in a LgBufUint8 buffer.
  *
- *        An allocation failure is possible, in which case an out of memory exception
- *        will be generated.
+ * \param[in]     in_buf         The buffer to parse.
+ * \param[in]     in_start       The index of the first byte to examine.  If this byte is outside
+ *                               the buffer, no invalid dreferencing will occur, out_end will be
+ *                               set to one byte beyond the end of the buffer, and nothing can
+ *                               be parsed.
+ * \param[out]    out_end        One past the last byte consumed.  If the desired item could not
+ *                               be consumed, out_end will be set to the value of in_buf.  If the
+ *                               buffer is fully consumed, out_end will be set to one beyond beyond
+ *                               the end of the buffer.
+ * \param[out]    out_found      true if at least one byte could be consumed, or false otherwise.
+ *                               nullptr is a valid value, and is a signal that the caller has no
+ *                               interest in receiving the value through the parameter list (it is
+ *                               still provided as a return value from the function).
  *
- * \param[in]     nbytes         The size to allocate upwards to.  Values that would result
- *                               in a downward allocation will be ignored, and no action
- *                               will be taken.
+ * \returns                      true if at least one byte could be consumed, or false otherwise (mirror
+ *                               of out_found).
  *
  * \reentrancyandthreadsafety    Not evaluated.
  *
  * \errorsandexceptions          Out of memory is a possible exception.
  */
-void AllocateAtLeast(size_t nbytes)
+bool LgPrdpBu8ParseSpcTbNoEols(const LgBufUint8& in_buf, size_t in_start, size_t& out_end, bool* out_found)
 {
-   //size_t new_allocation;
+   bool rv_found = false;
+   size_t nelem = in_buf.Nelem();
+   size_t i;
+
+   if (in_start >= nelem)
+   {
+      //The start index is one past the buffer (buffer exhausted), or even larger (invalid
+      //start value).  In either case, the return value is false and out_end will be set
+      //to one past the end of the buffer.
+      out_end = nelem;
+   }
+   else
+   {
+      //Possible to parse.
+      i = in_start;
+      out_end = in_start;
+
+      while ((i < nelem) && ((in_buf[i] == (uint8_t)' ') || (in_buf[i] == (uint8_t)'\t')))
+      {
+         i++;
+      }
+
+      if (i != in_start)
+      {
+         //At least one byte was consumed.
+         rv_found = true;
+         out_end = i;
+      }
+   }
+
+   if (out_found)
+      *out_found = rv_found;
+
+   return rv_found;
 }
 
 //End of lg_parse_rdp_buf_uint8.cpp
