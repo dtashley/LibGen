@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-//Header file for verbosity-related functions.
+//Header file for storage of configuration and constants.
 //--------------------------------------------------------------------------------------------------
 //This file is part of LibGen, https://github.com/dtashley/LibGen, and is provided
 //under The Unlicense, reproduced below.
@@ -8,7 +8,7 @@
 //
 //Anyone is free to copy, modify, publish, use, compile, sell, or
 //distribute this software, either in source code form or as a compiled
-//binary, for any purpose, commercial or non - commercial, and by any
+//binary, for any purpose, commercial or non-commercial, and by any
 //means.
 //
 //In jurisdictions that recognize copyright laws, the author or authors
@@ -29,11 +29,14 @@
 //
 //For more information, please refer to <https://unlicense.org>
 //--------------------------------------------------------------------------------------------------
-#ifndef LG_CPP_VERBOSITY_HPP_INCLUDED
-   #define LG_CPP_VERBOSITY_HPP_INCLUDED
+#ifndef LG_CONFIGCONSTANTS_HPP_INCLUDED
+#define LG_CONFIGCONSTANTS_HPP_INCLUDED
 
-   extern void LgVerbosity_VerbositySet(unsigned in_verbosity) noexcept;
-   extern unsigned LgVerbosity_VerbosityGet(void) noexcept;
+extern unsigned LgConfigconstants_VerbosityGet(void) noexcept;
+extern void LgConfigconstants_VerbositySet(unsigned in_verbosity) noexcept;
+extern size_t LgConfigconstants_LinelengthGet(void) noexcept;
+extern void LgConfigconstants_LinelengthSet(size_t in_linelength) noexcept;
+
 #endif
 
-//End of lg_verbosity.hpp.
+//End of lg_configconstants.hpp

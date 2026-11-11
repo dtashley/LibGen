@@ -33,6 +33,11 @@
    #define LG_CPP_DD_CHARF_HPP_INCLUDED
 
    extern bool LgCppDd_CharfIsDigit(const char in_digit) noexcept;
+   extern bool LgCppDd_CharfIsLetterLc(const char in_char) noexcept;
+   extern bool LgCppDd_CharfIsLetterUc(const char in_char) noexcept;
+   extern bool LgCppDd_CharfIsLetter(const char in_char) noexcept;
+   extern bool LgCppDd_CharfIsLetterOrDigit(const char in_char) noexcept;
+   extern bool LgCppDd_CharfIsLetterDigitOrUnderscore(const char in_char) noexcept;
    extern unsigned LgCppDd_CharfDigitToVal(const char in_digit) noexcept;
    extern bool LgCppDd_CharfAsciiCharIsLargelyPrintable(const char in_c) noexcept;
    extern char LgCppDd_CharfNibbleToLcHexDigit(const unsigned in_nibble) noexcept;

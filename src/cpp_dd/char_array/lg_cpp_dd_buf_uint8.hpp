@@ -103,8 +103,7 @@ class LgBufUint8
       void AllocateAtLeast(size_t nbytes);
       void SetNelem(size_t nbytes);
       /*!
-       * \brief Returns the pointer to the internal buffer.  Used only for file read and
-       *        write operations.
+       * \brief Returns the pointer to the internal buffer.
        */
       uint8_t *GetBufPtr(void) const noexcept
       {

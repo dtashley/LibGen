@@ -69,6 +69,351 @@ bool LgCppDd_CharfIsDigit(const char in_digit) noexcept
 
 
 /*!
+ * Determines whether an ASCII character is a lower-case letter; returns <i>true</i> if
+ * so or <i>false</i> otherwise.
+ *
+ * \param[in]  in_byte           The character to test to determine if it is a lower-case letter.
+ * \returns                      Returns <i>true</i> if the character is a lower-case letter, 
+ *                               or <i>false</i> otherwise.
+ * \reentrancyandthreadsafety    This function is re-entrant and thread safe.
+ * \errorsandexceptions          No exceptions are possible.
+ */
+bool LgCppDd_CharfIsLetterLc(const char in_char) noexcept
+{
+   switch (in_char)
+   {
+      case 'a':
+      case 'b':
+      case 'c':
+      case 'd':
+      case 'e':
+      case 'f':
+      case 'g':
+      case 'h':
+      case 'i':
+      case 'j':
+      case 'k':
+      case 'l':
+      case 'm':
+      case 'n':
+      case 'o':
+      case 'p':
+      case 'q':
+      case 'r':
+      case 's':
+      case 't':
+      case 'u':
+      case 'v':
+      case 'w':
+      case 'x':
+      case 'y':
+      case 'z':
+         return true;
+         break;
+      default:
+         return false;
+         break;
+   }
+}
+
+
+/*!
+ * Determines whether an ASCII character is an upper-case letter; returns <i>true</i> if
+ * so or <i>false</i> otherwise.
+ *
+ * \param[in]  in_byte           The character to test to determine if it is an upper-case letter.
+ * \returns                      Returns <i>true</i> if the character is an upper-case letter, 
+ *                               or <i>false</i> otherwise.
+ * \reentrancyandthreadsafety    This function is re-entrant and thread safe.
+ * \errorsandexceptions          No exceptions are possible.
+ */
+bool LgCppDd_CharfIsLetterUc(const char in_char) noexcept
+{
+   switch (in_char)
+   {
+      case 'A':
+      case 'B':
+      case 'C':
+      case 'D':
+      case 'E':
+      case 'F':
+      case 'G':
+      case 'H':
+      case 'I':
+      case 'J':
+      case 'K':
+      case 'L':
+      case 'M':
+      case 'N':
+      case 'O':
+      case 'P':
+      case 'Q':
+      case 'R':
+      case 'S':
+      case 'T':
+      case 'U':
+      case 'V':
+      case 'W':
+      case 'X':
+      case 'Y':
+      case 'Z':
+         return true;
+         break;
+      default:
+         return false;
+         break;
+   }
+}
+
+
+/*!
+ * Determines whether an ASCII character is a letter; returns <i>true</i> if so or <i>false</i>
+ * otherwise.
+ *
+ * \param[in]  in_byte           The character to test to determine if it is a letter.
+ * \returns                      Returns <i>true</i> if the character is a letter, 
+ *                               or <i>false</i> otherwise.
+ * \reentrancyandthreadsafety    This function is re-entrant and thread safe.
+ * \errorsandexceptions          No exceptions are possible.
+ */
+bool LgCppDd_CharfIsLetter(const char in_char) noexcept
+{
+   switch (in_char)
+   {
+      case 'a':
+      case 'b':
+      case 'c':
+      case 'd':
+      case 'e':
+      case 'f':
+      case 'g':
+      case 'h':
+      case 'i':
+      case 'j':
+      case 'k':
+      case 'l':
+      case 'm':
+      case 'n':
+      case 'o':
+      case 'p':
+      case 'q':
+      case 'r':
+      case 's':
+      case 't':
+      case 'u':
+      case 'v':
+      case 'w':
+      case 'x':
+      case 'y':
+      case 'z':
+      case 'A':
+      case 'B':
+      case 'C':
+      case 'D':
+      case 'E':
+      case 'F':
+      case 'G':
+      case 'H':
+      case 'I':
+      case 'J':
+      case 'K':
+      case 'L':
+      case 'M':
+      case 'N':
+      case 'O':
+      case 'P':
+      case 'Q':
+      case 'R':
+      case 'S':
+      case 'T':
+      case 'U':
+      case 'V':
+      case 'W':
+      case 'X':
+      case 'Y':
+      case 'Z':
+         return true;
+         break;
+      default:
+         return false;
+         break;
+   }
+}
+
+
+/*!
+ * Determines whether an ASCII character is a letter or digit; returns <i>true</i> if so or <i>false</i>
+ * otherwise.
+ *
+ * \param[in]  in_byte           The character to test to determine if it is a letter or digit.
+ * \returns                      Returns <i>true</i> if the character is a letter or digit, 
+ *                               or <i>false</i> otherwise.
+ * \reentrancyandthreadsafety    This function is re-entrant and thread safe.
+ * \errorsandexceptions          No exceptions are possible.
+ */
+bool LgCppDd_CharfIsLetterOrDigit(const char in_char) noexcept
+{
+   switch (in_char)
+   {
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+      case 'a':
+      case 'b':
+      case 'c':
+      case 'd':
+      case 'e':
+      case 'f':
+      case 'g':
+      case 'h':
+      case 'i':
+      case 'j':
+      case 'k':
+      case 'l':
+      case 'm':
+      case 'n':
+      case 'o':
+      case 'p':
+      case 'q':
+      case 'r':
+      case 's':
+      case 't':
+      case 'u':
+      case 'v':
+      case 'w':
+      case 'x':
+      case 'y':
+      case 'z':
+      case 'A':
+      case 'B':
+      case 'C':
+      case 'D':
+      case 'E':
+      case 'F':
+      case 'G':
+      case 'H':
+      case 'I':
+      case 'J':
+      case 'K':
+      case 'L':
+      case 'M':
+      case 'N':
+      case 'O':
+      case 'P':
+      case 'Q':
+      case 'R':
+      case 'S':
+      case 'T':
+      case 'U':
+      case 'V':
+      case 'W':
+      case 'X':
+      case 'Y':
+      case 'Z':
+         return true;
+         break;
+      default:
+         return false;
+         break;
+   }
+}
+
+
+/*!
+ * Determines whether an ASCII character is a letter or digit or underscore; returns
+ * <i>true</i> if so or <i>false</i> otherwise.
+ *
+ * \param[in]  in_byte           The character to test to determine if it is a letter, digit, or
+ *                               underscore.
+ * \returns                      Returns <i>true</i> if the character is a letter, digit, or
+ *                               underscore, or <i>false</i> otherwise.
+ * \reentrancyandthreadsafety    This function is re-entrant and thread safe.
+ * \errorsandexceptions          No exceptions are possible.
+ */
+bool LgCppDd_CharfIsLetterDigitOrUnderscore(const char in_char) noexcept
+{
+   switch (in_char)
+   {
+      case '_':
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+      case 'a':
+      case 'b':
+      case 'c':
+      case 'd':
+      case 'e':
+      case 'f':
+      case 'g':
+      case 'h':
+      case 'i':
+      case 'j':
+      case 'k':
+      case 'l':
+      case 'm':
+      case 'n':
+      case 'o':
+      case 'p':
+      case 'q':
+      case 'r':
+      case 's':
+      case 't':
+      case 'u':
+      case 'v':
+      case 'w':
+      case 'x':
+      case 'y':
+      case 'z':
+      case 'A':
+      case 'B':
+      case 'C':
+      case 'D':
+      case 'E':
+      case 'F':
+      case 'G':
+      case 'H':
+      case 'I':
+      case 'J':
+      case 'K':
+      case 'L':
+      case 'M':
+      case 'N':
+      case 'O':
+      case 'P':
+      case 'Q':
+      case 'R':
+      case 'S':
+      case 'T':
+      case 'U':
+      case 'V':
+      case 'W':
+      case 'X':
+      case 'Y':
+      case 'Z':
+         return true;
+         break;
+      default:
+         return false;
+         break;
+   }
+}
+
+
+/*!
  * Maps from an ASCII digit to its value.  For example, '3' maps to 3.
  *
  * \param[in]  in_digit          The ASCII digit to convert to its digit value.
